@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+
+    body{
+        background-image: url('../doodle_bg.png');
+        background-size: cover;
+        background-attachment: fixed;
+        background-position: center;
+    }
+
+    .homepage{
+        background-image: url('../home_bg.jpg');
+        background-size: cover;
+        background-position: center;
+    }
+
+    @media (min-width: 768px){
+        .active{color: #A3B18A !important;}
+    }
+    @media (max-width: 768px){
+        .active{ background: #588157;}
+    }
+
+    /* styles for tating component */
+    .rating {
+        @apply flex flex-row-reverse;
+    }
+
+    .rating input {
+        display: none;
+    }
+
+    .rating label {
+        @apply text-white w-4 h-4 ml-1;
+        cursor: pointer;
+    }
+
+
+    .rating input:checked~label {
+        @apply text-yellow-300;
+    }
+
+    .rating label:hover,
+    .rating label:hover~label {
+        @apply text-yellow-300;
+    }
+
+    .dismiss {
+        opacity: 0;
+        transition: opacity 0.2s linear;
+    }
+
+    .userOptions {
+        display: none;
+    }
+
+    .userDropdown:hover .userOptions {
+        display: block;
+    }
+
+    .opacity-100 {
+        @apply opacity-100;
+    }
+
+    /* deletebutton in edit page */
+    .imageList>button:hover~img {
+        opacity: 0.8;
+    }
+
+}

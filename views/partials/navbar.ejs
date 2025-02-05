@@ -1,0 +1,151 @@
+<nav
+  class="bg-primary text-white block p-4 md:flex md:justify-between md:py-3 sticky top-0 z-50"
+>
+  <div class="grow flex justify-between items-center">
+    <h1 class="text-xl md:grow font-bold">
+      <a href="/">Kampİt</a>
+    </h1>
+    <div class="grow px-6">
+      <form class="max-md:mx-auto w-full max-w-lg relative">
+        <input
+          type="search"
+          id="search-campgrounds"
+          class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 outline-none rounded-lg placeholder-gray-400 focus:ring-2 focus:ring-secondary focus:border-secondary"
+          placeholder="Search for campgrounds"
+          required
+        />
+        <button
+          type="submit"
+          class="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white rounded-r-lg bg-secondary hover:bg-secondary-lt"
+        >
+          <svg
+            class="w-4 h-4"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 20 20"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+            />
+          </svg>
+          <span class="sr-only">Search</span>
+        </button>
+      </form>
+    </div>
+
+    <button
+      id="toggler"
+      type="button"
+      class="w-10 h-10 grid items-center justify-items-center rounded-lg outline outline-2 md:hidden text-white hover:bg-secondary focus:ring-secondary"
+    >
+      <svg
+        class="w-5 h-5"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 17 14"
+      >
+        <path
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M1 1h15M1 7h15M1 13h15"
+        />
+      </svg>
+    </button>
+  </div>
+  <ul
+    class="hidden max-md:pt-2 max-md:text-center max-md:border-t max-md:border-white/10 max-md:mt-2 text-lg font-medium md:flex"
+  >
+    <% if (signedUser) { %>
+    <a href="#">
+      <li class="hover:bg-secondary md:hidden rounded-md">
+        <span class="pl-2">My profile</span>
+        <span
+          class="mt-1 inline-block p w-6 h-6 rounded-full cursor-pointer bg-white text-primary font-bold text-center text-2xl leading-6"
+        >
+          <%=signedUser.username.slice(0,1).toUpperCase()%>
+        </span>
+      </li>
+    </a>
+    <a href="#">
+      <li class="p-1 rounded-md md:hidden hover:bg-secondary">Wishlist</li>
+    </a>
+    <% } %>
+    <a href="/campgrounds">
+      <li
+        class="p-1 rounded-md bg-inherit max-md:hover:bg-secondary md:ml-4 lg:ml-12 md:hover:text-info"
+      >
+        Campgrounds
+      </li>
+    </a>
+    <a href="/campgrounds/new">
+      <li
+        class="p-1 rounded-md bg-inherit max-md:hover:bg-secondary md:ml-4 md:hover:text-info"
+      >
+        New Camp
+      </li>
+    </a>
+    <% if (signedUser) { %>
+
+    <!-- Dropdown menu -->
+    <div class="userDropdown">
+      <p
+        class="max-md:hidden mt-1 ml-4 w-8 h-8 rounded-full cursor-pointer bg-white text-primary font-bold text-center text-2xl leading-8"
+      >
+        <%=signedUser.username.slice(0,1).toUpperCase()%>
+      </p>
+      <div
+        class="userOptions absolute right-0 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44"
+      >
+        <div class="px-4 py-3 text-sm text-gray-900 text-center">
+          <p class="font-bold text-secondary-lt">@<%= signedUser.username %></p>
+          <p><%= signedUser.email %></p>
+        </div>
+        <ul class="py-2 text-sm text-gray-700 text-center">
+          <li>
+            <a href="#" class="block px-4 py-2 hover:bg-info">Profile</a>
+          </li>
+          <li>
+            <a href="#" class="block px-4 py-2 hover:bg-info">Wishlist</a>
+          </li>
+        </ul>
+        <form class="py-1" action="/sign-out" method="post">
+          <button
+            class="block px-4 py-2 w-full text-sm text-center text-gray-700 hover:bg-gray-100"
+          >
+            Sign Out
+          </button>
+        </form>
+      </div>
+    </div>
+    <% } else { %>
+    <a href="/login">
+      <li
+        class="p-1 rounded-md max-md:hover:bg-secondary md:ml-4 lg:ml-12 md:px-3.5 md:py-1 md:text-secondary-lt md:bg-white md:hover:bg-neutral md:ring-1 md:ring-secondary md:rounded-md"
+      >
+        Login
+      </li>
+    </a>
+    <a href="/sign-up">
+      <li
+        class="p-1 rounded-md max-md:hover:bg-secondary md:ml-4 md:px-3.5 md:py-1 md:text-white md:bg-secondary-lt md:hover:bg-secondary md:ring-1 md:ring-secondary md:rounded-md"
+      >
+        Sign Up
+      </li>
+    </a>
+    <% } %> <% if (signedUser) { %>
+    <form action="/sign-out" method="post">
+      <button class="p-1 rounded-md w-full hover:bg-secondary md:hidden">
+        Sign Out
+      </button>
+    </form>
+    <% } %>
+  </ul>
+</nav>

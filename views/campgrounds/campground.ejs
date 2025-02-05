@@ -1,0 +1,337 @@
+<% layout('layouts/boilerplate') %>
+<link
+  href="https://api.mapbox.com/mapbox-gl-js/v3.9.3/mapbox-gl.css"
+  rel="stylesheet"
+/>
+
+<!-- Campground Details -->
+<div
+  class="max-w-sm mx-auto mt-8 md:max-w-4xl md:flex rounded-lg shadow bg-white border-primary-lt"
+>
+  <div class="min-h-72 relative md:w-1/2">
+    <button
+      class="text-secondary-lt absolute top-2 left-2 z-10 hover:text-secondary icon-controller"
+    >
+      <svg
+        class="show-map"
+        xmlns="http://www.w3.org/2000/svg"
+        width="32"
+        height="32"
+        viewBox="0 0 576 512"
+      >
+        <path
+          fill="currentColor"
+          d="M408 120c0 54.6-73.1 151.9-105.2 192c-7.7 9.6-22 9.6-29.6 0C241.1 271.9 168 174.6 168 120C168 53.7 221.7 0 288 0s120 53.7 120 120zm8 80.4c3.5-6.9 6.7-13.8 9.6-20.6c.5-1.2 1-2.5 1.5-3.7l116-46.4C558.9 123.4 576 135 576 152l0 270.8c0 9.8-6 18.6-15.1 22.3L416 503l0-302.6zM137.6 138.3c2.4 14.1 7.2 28.3 12.8 41.5c2.9 6.8 6.1 13.7 9.6 20.6l0 251.4L32.9 502.7C17.1 509 0 497.4 0 480.4L0 209.6c0-9.8 6-18.6 15.1-22.3l122.6-49zM327.8 332c13.9-17.4 35.7-45.7 56.2-77l0 249.3L192 449.4 192 255c20.5 31.3 42.3 59.6 56.2 77c20.5 25.6 59.1 25.6 79.6 0zM288 152a40 40 0 1 0 0-80 40 40 0 1 0 0 80z"
+        />
+      </svg>
+      <svg
+        class="show-carousel hidden"
+        xmlns="http://www.w3.org/2000/svg"
+        width="32"
+        height="32"
+        viewBox="0 0 512 512"
+      >
+        <path
+          fill="currentColor"
+          d="M448 80c8.8 0 16 7.2 16 16l0 319.8-5-6.5-136-176c-4.5-5.9-11.6-9.3-19-9.3s-14.4 3.4-19 9.3L202 340.7l-30.5-42.7C167 291.7 159.8 288 152 288s-15 3.7-19.5 10.1l-80 112L48 416.3l0-.3L48 96c0-8.8 7.2-16 16-16l384 0zM64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-320c0-35.3-28.7-64-64-64L64 32zm80 192a48 48 0 1 0 0-96 48 48 0 1 0 0 96z"
+        />
+      </svg>
+    </button>
+    <div
+      id="map"
+      class="hidden absolute w-full min-h-[300px] md:top-1/2 md:-translate-y-1/2 max-md:rounded-t-lg"
+    ></div>
+    <!-- Carousel wrapper -->
+    <div class="carousel">
+      <% if(!campground.images.length) { %>
+      <div
+        class="h-full absolute opacity-0 transition-opacity duration-1000 ease-in-out carousel-item"
+      >
+        <img
+          class="h-full w-full max-md:rounded-t-lg md:rounded-l-lg"
+          src="https://res.cloudinary.com/dxyhaq7se/image/upload/v1734978856/Kampit/ihzz7cwqv7rudpxefb3r.jpg"
+          alt=""
+        />
+      </div>
+      <% } else { %> <% for( let img of campground.images ) { %>
+      <div
+        class="h-full absolute top-0 opacity-0 transition-opacity duration-1000 ease-in-out carousel-item"
+      >
+        <img
+          class="h-full w-full max-md:rounded-t-lg md:rounded-l-lg"
+          src="<%= img.url %>"
+          alt=""
+        />
+      </div>
+      <% } %> <% } %>
+      <!-- Slider controls -->
+      <%if (campground.images.length>1) { %>
+      <button
+        type="button"
+        class="absolute top-1/2 -translate-y-1/2 start-0 z-30 flex items-center justify-center h-fit px-4 cursor-pointer group focus:outline-none"
+        data-carousel-prev
+      >
+        <span
+          class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-secondary/30 group-hover:bg-secondary/50 group-focus:ring-2 group-focus:ring-neutral-lt"
+        >
+          <svg
+            class="w-4 h-4 text-white rtl:rotate-180"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 6 10"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 1 1 5l4 4"
+            />
+          </svg>
+        </span>
+      </button>
+      <button
+        type="button"
+        class="absolute top-1/2 -translate-y-1/2 end-0 z-30 flex items-center justify-center h-fit px-4 cursor-pointer group focus:outline-none"
+        data-carousel-next
+      >
+        <span
+          class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-secondary/30 group-hover:bg-secondary/50 group-focus:ring-2 group-focus:ring-neutral-lt"
+        >
+          <svg
+            class="w-4 h-4 text-white rtl:rotate-180"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 6 10"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m1 9 4-4-4-4"
+            />
+          </svg>
+        </span>
+      </button>
+      <% } %>
+    </div>
+  </div>
+  <div class="p-3 md:self-center md:w-1/2">
+    <h2 class="text-xl font-bold tracking-tight text-primary">
+      <%= campground.title %>
+    </h2>
+    <h3 class="mb-2 text-lg font-medium tracking-tight text-primary">
+      <%= campground.location %>
+    </h3>
+    <p class="mb-6 font-normal text-gray-800"><%= campground.description %></p>
+    <div class="flex items-center justify-between">
+      <p class="text-primary-lt text-lg font-bold w-1/2">
+        $<%= campground.price %><span class="text-base font-normal"
+          >/night</span
+        >
+      </p>
+      <% if (signedUser && (campground.author.equals(signedUser._id))) { %>
+      <div class="flex">
+        <!-- Edit Button -->
+        <a href="/campgrounds/<%= campground._id %>/edit">
+          <button
+            class="mr-4 text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-secondary-lt hover:bg-secondary focus:ring-secondary-lt"
+          >
+            Edit
+          </button>
+        </a>
+
+        <!-- Delete Button -->
+        <form
+          action="/campgrounds/<%= campground._id %>?_method=DELETE"
+          method="post"
+        >
+          <button
+            type="submit"
+            class="inline-flex items-center border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center border-red-500 text-red-500 hover:text-white hover:bg-red-600 focus:ring-red-900"
+          >
+            <svg
+              class="w-5 h-5 mr-1 -ml-1"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
+            Delete
+          </button>
+        </form>
+      </div>
+      <% } else { %>
+      <p>
+        <span class="italic text-gray-500 text-sm">listed by:</span>
+        <span class="text-primary-lt font-bold hover:underline">
+          <a href="#"> <%= campground.author.username %> </a>
+        </span>
+      </p>
+      <% } %>
+    </div>
+    <div class="flex space justify-center mt-3">
+      <div class="flex items-center">
+        <svg
+          class="w-4 h-4 text-yellow-300 me-1"
+          aria-hidden="true"
+          fill="currentColor"
+          viewBox="0 0 22 20"
+        >
+          <path
+            d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"
+          />
+        </svg>
+        <p class="ms-2 text-sm font-bold text-gray-900"><%= meanRating %></p>
+        <span class="w-1 h-1 mx-1.5 bg-gray-500 rounded-full"></span>
+        <a
+          href="#"
+          class="text-sm font-medium text-gray-900 underline hover:no-underline"
+        >
+          <%= reviewCount %>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Review Form -->
+<% if (signedUser) { %>
+<form action="/campgrounds/<%= campground._id %>/reviews" method="POST">
+  <div
+    class="max-w-sm md:max-w-4xl mx-auto mt-4 mb-2 border rounded-lg bg-primary border-primary-lt"
+  >
+    <div class="px-4 py-2 rounded-t-lg bg-white">
+      <label for="review" class="sr-only">Your Review</label>
+      <textarea
+        id="review"
+        rows="4"
+        class="w-full px-0 text-sm border-0 outline-none bg-white focus:ring-0 text-gray-700 placeholder-secondary"
+        placeholder="Leave a review..."
+        required
+        name="review[body]"
+      ></textarea>
+    </div>
+    <div
+      class="flex items-center justify-between px-3 py-2 border-t border-gray-600"
+    >
+      <div class="rating">
+        <% for (let i=5; i>= 1; i--) { %>
+        <input
+          name="review[rating]"
+          id="r<%= i %>"
+          type="radio"
+          value="<%= i %>"
+          required
+        />
+        <label for="r<%= i %>">
+          <svg aria-hidden="true" fill="currentColor" viewBox="0 0 22 20">
+            <path
+              d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"
+            />
+          </svg>
+        </label>
+        <% } %>
+      </div>
+      <button
+        type="submit"
+        class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-secondary-lt rounded-lg focus:ring-4 hover:bg-secondary focus:ring-secondary-lt"
+      >
+        Post Review
+      </button>
+    </div>
+  </div>
+</form>
+<% } %>
+
+<!-- Reviews Section -->
+<section class="relative max-w-sm md:max-w-4xl mx-auto mt-4">
+  <% if (campground.reviews.length !==0) { %>
+  <h3 class="text-xl font-semibold text-gray-900 inline-block">All Reviews</h3>
+  <span class="absolute right-0">Sort by </span>
+  <div class="mt-2 flex flex-col divide-y divide-info">
+    <% for (let review of campground.reviews) { %>
+    <div class="py-2">
+      <div class="flex content-center">
+        <p
+          class="mr-4 w-8 h-8 rounded-full cursor-pointer bg-secondary text-white font-bold text-center text-2xl leading-8"
+        >
+          <%=review.author.username.slice(0,1).toUpperCase()%>
+        </p>
+        <div class="grow flex flex-col">
+          <div class="flex w-fit bg-primary rounded-xl p-1">
+            <% for (let i=0; i < review.rating; i++) { %>
+            <svg
+              class="mr-1 text-yellow-300 w-3 h-3"
+              aria-hidden="true"
+              fill="currentColor"
+              viewBox="0 0 22 20"
+            >
+              <path
+                d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"
+              />
+            </svg>
+            <% } %>
+          </div>
+          <p class="text-base font-semibold text-gray-900">
+            <%= review.author.username %>
+          </p>
+        </div>
+        <div class="relative">
+          <% if (signedUser && signedUser.equals(review.author._id)) { %>
+          <button
+            class="comment-btn inline-flex p-2 text-sm font-medium text-center text-gray-700 bg-white rounded-lg hover:bg-info"
+          >
+            <svg
+              class="w-4 h-4"
+              aria-hidden="true"
+              fill="currentColor"
+              viewBox="0 0 16 3"
+            >
+              <path
+                d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"
+              />
+            </svg>
+          </button>
+          <!-- Dropdown menu -->
+          <div
+            class="comment-options hidden absolute right-0 z-10 w-36 bg-white rounded divide-y divide-gray-100 shadow"
+          >
+            <ul class="py-1 text-sm max-w-sm text-gray-700">
+              <li class="block py-2 px-4 hover:bg-info">Edit</li>
+              <li class="block py-2 px-4 hover:bg-info">
+                <form
+                  action="/campgrounds/<%= campground._id %>/reviews/<%= review._id %>?_method=DELETE"
+                  method="POST"
+                >
+                  <button class="text-left w-full">Delete</button>
+                </form>
+              </li>
+            </ul>
+          </div>
+          <% } %>
+        </div>
+      </div>
+      <p class="text-base font-normal break-words text-gray-700">
+        <%= review.body %>
+      </p>
+    </div>
+    <% } %>
+  </div>
+  <% } %>
+</section>
+
+<script>
+  const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
+  const coordinates = [<%= campground.geometry.coordinates %>];
+</script>
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.9.3/mapbox-gl.js"></script>
+<script src="http://localhost:8080/public/scripts/showCampground.js"></script>

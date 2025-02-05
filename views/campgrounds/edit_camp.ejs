@@ -1,0 +1,98 @@
+<% layout('layouts/boilerplate') %>
+
+    <section class="sm:my-8">
+        <div class="py-6 px-4 mx-auto rounded-lg max-w-2xl lg:py-8">
+            <h2 class="mb-4 text-xl font-bold text-secondary-lt">Edit Campground</h2>
+            <form action="/campgrounds/<%= campground._id %>/?_method=PUT" method="post" enctype="multipart/form-data">
+                <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
+
+                    <!-- Title Field -->
+                    <div class="sm:col-span-2">
+                        <label for="title" class="block mb-2 text-sm font-semibold text-secondary-lt">Title</label>
+                        <input type="text" value="<%= campground.title %>" name="campground[title]" id="title"
+                            class="text-sm rounded-lg block w-full p-2.5 bg-white border border-secondary outline-none placeholder-gray-400 text-gray-900 focus:ring-2 focus:ring-secondary-lt focus:border-secondary-lt"
+                            placeholder="Type Camp name" required>
+                    </div>
+
+                    <!-- Location Field -->
+                    <div class="sm:col-span-2">
+                        <label for="location"
+                            class="block mb-2 text-sm font-semibold text-secondary-lt">Location</label>
+                        <input type="text" value="<%= campground.location %>" name="campground[location]" id="location"
+                            class="text-sm rounded-lg block w-full p-2.5 bg-white border border-secondary outline-none placeholder-gray-400 text-gray-900 focus:ring-2 focus:ring-secondary-lt focus:border-secondary-lt"
+                            placeholder="Type Camp location" required>
+                    </div>
+
+                    <!-- Price Field -->
+                    <div class="sm:col-span-2">
+                        <label for="price" class="block mb-2 text-sm font-semibold text-secondary-lt">Price</label>
+                        <div
+                            class="flex flex-row rounded-lg bg-secondary border border-secondary focus-within:ring-2 focus-within:ring-secondary-lt focus-within:border-secondary-lt">
+                            <span class="px-3 flex items-center bg-secondary rounded-l-lg text-white">$</span>
+                            <input type="number" value="<%= campground.price %>" min="0" step="0.01" id="price"
+                                name="campground[price]"
+                                class="text-sm block w-full p-2.5 bg-gray-50 outline-none text-gray-900"
+                                placeholder="0.00" required>
+                            <span class="px-1 flex items-center bg-secondary rounded-r-lg text-white font-medium"
+                                id="price-currency">USD</span>
+                        </div>
+                    </div>
+
+                    <!-- Image Field -->
+                    <div class="sm:col-span-2">
+                        <label for="image" class="block mb-2 text-sm font-semibold text-secondary-lt">Upload
+                            Images</label>
+                        <input
+                            class="cursor-pointer block w-full text-sm font-medium rounded-lg bg-white border border-secondary outline-none placeholder-gray-400 text-gray-900 focus:ring-2 focus:ring-secondary-lt focus:border-secondary-lt
+                             file:bg-secondary file:hover:bg-opacity-85 file:text-white file:border-none file:p-2 file:mr-5"
+                            id="image" name="image" type="file" multiple>
+                    </div>
+
+                    <div class="sm:col-span-2 flex space-x-4">
+                        <% campground.images.forEach(function(img){ %>
+                            <div class="imageList relative flex">
+                                <button type="button"
+                                    class="deleteButton absolute z-10 right-0 text-red-500 cursor-pointer">
+                                    <svg width="24" height="24" viewBox="0 0 24 24">
+                                        <path fill="currentColor"
+                                            d="M7 21q-.825 0-1.412-.587T5 19V6q-.425 0-.712-.288T4 5t.288-.712T5 4h4q0-.425.288-.712T10 3h4q.425 0 .713.288T15 4h4q.425 0 .713.288T20 5t-.288.713T19 6v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zm-7 11q.425 0 .713-.288T11 16V9q0-.425-.288-.712T10 8t-.712.288T9 9v7q0 .425.288.713T10 17m4 0q.425 0 .713-.288T15 16V9q0-.425-.288-.712T14 8t-.712.288T13 9v7q0 .425.288.713T14 17M7 6v13z" />
+                                    </svg>
+                                </button>
+                                <img class="transition-opacity" src="<%= img.thumbnail %>" alt="campground image"
+                                    id="<%= img.filename %>">
+
+                                <input type="hidden" name="deletedImages[]" value="" class="deleted-image-input">
+                            </div>
+                            <% }) %>
+                    </div>
+
+                    <!-- Description Field -->
+                    <div class="sm:col-span-2">
+                        <label for="description"
+                            class="block mb-2 text-sm font-semibold text-secondary-lt">Description</label>
+                        <textarea name="campground[description]" id="description" rows="8"
+                            class="block p-2.5 w-full text-sm rounded-lg bg-white border border-secondary outline-none placeholder-gray-400 text-gray-900 focus:ring-2 focus:ring-secondary-lt focus:border-secondary-lt"
+                            placeholder="Your description here" required><%= campground.description %></textarea>
+                    </div>
+
+                </div>
+
+                <!-- Form Actions -->
+                <div class="flex justify-between items-center mt-4 sm:mt-6">
+                    <a class="inline-flex items-center mr-8 transition-colors duration-200 text-secondary-lt hover:text-secondary font-semibold"
+                        href="/campgrounds/<%= campground._id %>">
+                        <svg class="w-3.5 h-3.5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 14 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 5H1m0 0 4 4M1 5l4-4"></path>
+                        </svg>
+                        Go back
+                    </a>
+                    <button type="submit"
+                        class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-secondary-lt rounded-lg hover:bg-secondary focus:ring-4 focus:ring-secondary-lt">
+                        Update Campground
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
