@@ -22,7 +22,7 @@ const reviewRoute = require('./routes/reviews');
 const User = require('./models/user'); //used by passport
 
 
-const dbUrl = process.env.dbUrl;
+const dbUrl = process.env.DB_URL;
 
 async function main() {
     await mongoose.connect(dbUrl);
@@ -42,14 +42,15 @@ app.use(methodOverride('_method'))
 app.use(express.urlencoded({ extended: true }));
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
+const secret = process.env.SECRET
 const sessionConfig = {
     name:'valid',
-    secret: process.env.SECRET,
+    secret: secret,
     store: MongoStore.create({
         mongoUrl: dbUrl,
         touchAfter: 24*3600,
         crypto:{
-            secret: process.env.SECRET
+            secret: secret
         }
     }),
     resave: false,
