@@ -13,23 +13,23 @@
   <div
     class="flex flex-col max-w-xl justify-self-center max-md:mb-6 lg:flex-row border rounded-lg shadow bg-white border-primary-lt"
   >
-    <a href="/campgrounds/<%=campground._id%>">
+    <a href="/campgrounds/<%=campground._id%>" class="lg:w-1/3">
       <% if (campground.images.length) { %>
       <img
-        class="rounded-t-lg w-lvw h-48 lg:h-96 lg:rounded-none lg:rounded-l-lg"
+        class="rounded-t-lg w-full h-48 object-cover lg:h-full lg:rounded-t-none lg:rounded-l-lg"
         src="<%= campground.images[0].url %>"
         alt=""
       />
       <% } else { %>
       <img
-        class="rounded-t-lg w-lvw h-48 lg:h-96 lg:rounded-none lg:rounded-l-lg"
+        class="rounded-t-lg w-full h-48 object-cover lg:h-full lg:rounded-t-none lg:rounded-l-lg"
         src="
                             https://res.cloudinary.com/dxyhaq7se/image/upload/v1734978856/Kampit/ihzz7cwqv7rudpxefb3r.jpg"
         alt=""
       />
       <% } %>
     </a>
-    <div class="p-5">
+    <div class="p-5 lg:w-2/3">
       <a href="/campgrounds/<%=campground._id%>">
         <h3 class="text-xl font-bold tracking-tight text-primary-lt">
           <%= campground.title %>
@@ -38,7 +38,7 @@
       <h4 class="mb-2 text-md font-bold tracking-tight text-primary-lt">
         <%=campground.location %>
       </h4>
-      <p class="mb-3 font-normal text-secondary">
+      <p class="mb-3 font-normal text-secondary line-clamp-[7]">
         <%= campground.description %>
       </p>
       <a
