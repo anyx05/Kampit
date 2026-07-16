@@ -6,6 +6,15 @@ const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
 const mapBoxToken = process.env.MAPBOX_TOKEN;
 const geocoder = mbxGeocoding({ accessToken: mapBoxToken });
 
+const EDITABLE_CAMPGROUND_FIELDS = ['title', 'price', 'description', 'location'];
+
+const editableCampgroundFields = (input = {}) => Object.fromEntries(
+    EDITABLE_CAMPGROUND_FIELDS
+        .filter((field) => Object.prototype.hasOwnProperty.call(input, field))
+        .map((field) => [field, input[field]])
+);
+
+const asArray = (value) => value === undefined ? [] : (Array.isArray(value) ? value : [value]);
 
 module.exports.index = async (req, res) => {
     const campgrounds = await Campground.find({});
@@ -28,20 +37,21 @@ module.exports.renderAddCampForm = (req, res) => {
 }
 
 module.exports.createCamp = async (req, res, next) => {
+    const editableFields = editableCampgroundFields(req.body?.campground);
     const geoData = await geocoder.forwardGeocode({
-        query: req.body.campground.location,
+        query: editableFields.location,
         limit: 1
     }).send();
-    if (req.files.length == 0) {
+    const uploadedImages = req.files || [];
+    if (uploadedImages.length === 0) {
         req.flash('error', 'Please include atleast one image!');
         return res.redirect('/campgrounds/new');
     }
-    const campground = new Campground(req.body.campground);
+    const campground = new Campground(editableFields);
     campground.geometry = geoData.body.features[0].geometry;
     campground.author = req.user._id;
-    campground.images = req.files.map((img) => ({ filename: img.filename, url: img.path }));
+    campground.images = uploadedImages.map((img) => ({ filename: img.filename, url: img.path }));
     await campground.save();
-    console.log(campground);
     req.flash('success', 'Created new campground successfully!');
     res.redirect(`/campgrounds/${campground._id}`);
 }
@@ -76,27 +86,34 @@ module.exports.renderEditCampForm = async (req, res, next) => {
 
 module.exports.updateCamp = async (req, res) => {
     const { id } = req.params;
-    const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
+    const campground = await Campground.findById(id);
     if (!campground) {
         throw new ExpressError('Campground not found.', 404);
     }
-    const addedImages = req.files.map((img) => ({ filename: img.filename, url: img.path }));
-    const allDeleted = req.body.deletedImages.every((imageUrl, index) => {
-        return imageUrl === campground.images[index].filename;
-    })
-    if (addedImages.length === 0 && allDeleted) { 
+
+    campground.set(editableCampgroundFields(req.body?.campground));
+
+    const existingImages = campground.images || [];
+    const existingFilenames = new Set(existingImages.map((image) => image.filename));
+    const deletedImages = [...new Set(
+        asArray(req.body?.deletedImages)
+            .filter((filename) => typeof filename === 'string' && existingFilenames.has(filename))
+    )];
+    const deletedImageSet = new Set(deletedImages);
+    const retainedImages = existingImages.filter((image) => !deletedImageSet.has(image.filename));
+    const addedImages = (req.files || [])
+        .map((img) => ({ filename: img.filename, url: img.path }));
+
+    if (retainedImages.length === 0 && addedImages.length === 0) {
         req.flash('error', 'Please include at least one image!');
         return res.redirect(`/campgrounds/${id}/edit`);
     }
-    campground.images.push(...addedImages);
-    const deletedImages = (req.body.deletedImages) ? req.body.deletedImages.filter((url) => url != "") : undefined;
-    if (deletedImages) {
-        for (let image of deletedImages) {
-            await cloudinary.uploader.destroy(image);
-        }
-        await campground.updateOne({ $pull: { images: { filename: { $in: deletedImages } } } });
-    }
+
+    campground.images = [...retainedImages, ...addedImages];
     await campground.save();
+
+    await Promise.all(deletedImages.map((filename) => cloudinary.uploader.destroy(filename)));
+
     req.flash('success', 'Updated campground successfully.')
     res.redirect(`/campgrounds/${campground._id}`);
 }

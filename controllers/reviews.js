@@ -2,6 +2,14 @@ const Campground = require('../models/campgrounds');
 const Review = require('../models/reviews');
 const { ExpressError } = require('../utils/errorHandler');
 
+const EDITABLE_REVIEW_FIELDS = ['body', 'rating'];
+
+const editableReviewFields = (input = {}) => Object.fromEntries(
+    EDITABLE_REVIEW_FIELDS
+        .filter((field) => Object.prototype.hasOwnProperty.call(input, field))
+        .map((field) => [field, input[field]])
+);
+
 const sameObjectId = (left, right) => Boolean(
     left && right && String(left._id || left) === String(right._id || right)
 );
@@ -14,7 +22,7 @@ module.exports.addReview = async (req, res) => {
     if (!req.user?._id) {
         throw new ExpressError('User not found.', 404);
     }
-    const review = new Review(req.body.review);
+    const review = new Review(editableReviewFields(req.body?.review));
     review.author = req.user._id;
     campground.reviews.push(review);
     await review.save();
@@ -36,7 +44,11 @@ module.exports.deleteReviews = async (req, res) => {
     if (!belongsToCampground) {
         throw new ExpressError('Review not found for this campground.', 404);
     }
-    await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
+    await Campground.findByIdAndUpdate(
+        id,
+        { $pull: { reviews: reviewId } },
+        { runValidators: true }
+    );
     await Review.findByIdAndDelete(reviewId);
     res.redirect(`/campgrounds/${id}`);
 }
