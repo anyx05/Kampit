@@ -19,10 +19,15 @@ const helmet = require('helmet');
 const { ExpressError } = require('./utils/errorHandler');
 const User = require('./models/user'); //used by passport
 
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 const DATABASE_NAME = 'Kampit';
 const REQUIRED_ENVIRONMENT_VARIABLES = [
     'DB_URL',
-    'SECRET',
+    'SESSION_SECRET',
+    'MONGO_STORE_SECRET',
     'MAPBOX_TOKEN',
     'CLOUDNAME',
     'CLOUDINARYKEY',
@@ -38,6 +43,19 @@ function validateEnvironment() {
     if (missingVariables.length) {
         throw new Error(`Missing required environment variables: ${missingVariables.join(', ')}`);
     }
+
+    if (process.env.SESSION_SECRET === process.env.MONGO_STORE_SECRET) {
+        throw new Error('SESSION_SECRET and MONGO_STORE_SECRET must be different values.');
+    }
+}
+
+function sessionCookieOptions(isProduction) {
+    return {
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: 'lax',
+        maxAge: 7 * 24 * 60 * 60 * 1000
+    };
 }
 
 function configureDnsServers() {
@@ -77,6 +95,11 @@ function createApp() {
     const campgroundRoute = require('./routes/campgrounds');
     const reviewRoute = require('./routes/reviews');
     const app = express();
+    const isProduction = process.env.NODE_ENV === 'production';
+
+    // Render terminates TLS at one proxy hop. Express must trust that hop so
+    // secure session cookies recognize X-Forwarded-Proto: https.
+    if (isProduction) app.set('trust proxy', 1);
 
     app.engine('ejs', ejsMate);
     app.set('view engine', 'ejs');
@@ -108,28 +131,28 @@ function createApp() {
     app.use(express.urlencoded({ extended: true }));
     app.use('/public', express.static(path.join(__dirname, 'public')));
 
-    const secret = process.env.SECRET;
     const sessionConfig = {
         name: 'valid',
-        secret,
+        secret: process.env.SESSION_SECRET,
         store: MongoStore.create({
             client: mongoose.connection.getClient(),
             dbName: DATABASE_NAME,
             touchAfter: 24 * 3600,
             crypto: {
-                secret
+                secret: process.env.MONGO_STORE_SECRET
             }
         }),
         resave: false,
-        saveUninitialized: true,
-        cookie: {
-            httpOnly: true,
-            // secure:true,
-            maxAge: 604800000 //(ms)
-        }
+        saveUninitialized: false,
+        cookie: sessionCookieOptions(isProduction)
     };
     app.use(session(sessionConfig));
+
+    // Passport sessions require express-session to run first.
+    app.use(passport.initialize());
+    app.use(passport.session());
     app.use(flash());
+
     app.use(mongoSanitize());
     app.use(helmet());
 
@@ -153,24 +176,12 @@ function createApp() {
         })
     );
 
-    //passport-related
-    app.use(passport.initialize());
-    app.use(passport.session());
-    passport.use(new LocalStrategy(User.authenticate()));
-    passport.serializeUser(User.serializeUser());
-    passport.deserializeUser(User.deserializeUser());
-
     app.use((req, res, next) => {
-        if (!['/sign-up', '/login', '/'].includes(req.originalUrl)) {
-            if (req.originalUrl) {
-                if (req.originalUrl.includes('/reviews')) {
-                    req.originalUrl = req.originalUrl.substring(0, req.originalUrl.indexOf('/reviews'));
-                }
-                req.session.returnTo = req.originalUrl;
-            }
+        // Avoid creating an otherwise empty session just to read flash data.
+        if (req.session.flash) {
+            res.locals.success = req.flash('success');
+            res.locals.error = req.flash('error');
         }
-        res.locals.success = req.flash('success');
-        res.locals.error = req.flash('error');
         res.locals.signedUser = req.user;
         next();
     });
@@ -249,4 +260,10 @@ if (require.main === module) {
     });
 }
 
-module.exports = { configureDnsServers, createApp, start, validateEnvironment };
+module.exports = {
+    configureDnsServers,
+    createApp,
+    sessionCookieOptions,
+    start,
+    validateEnvironment
+};

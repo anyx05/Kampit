@@ -2,6 +2,7 @@ const Campground = require('../models/campgrounds');
 const Review = require('../models/reviews');
 const { body, validationResult } = require('express-validator');
 const { ExpressError } = require('../utils/errorHandler');
+const { returnPathForRequest } = require('./auth');
 
 const validateCampground = [
     body('campground.title').trim().notEmpty().withMessage('Title is required').escape(),
@@ -35,6 +36,8 @@ const validateReviews = [
 
 const isLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
+        const returnTo = returnPathForRequest(req);
+        if (returnTo) req.session.returnTo = returnTo;
         req.flash('error', 'You must be signed in first!');
         return res.redirect('/login');
     }
@@ -44,9 +47,6 @@ const isLoggedIn = (req, res, next) => {
 const redirectIfLoggedIn = (req, res, next) => {
     if (req.isAuthenticated()) {
         return res.redirect('/campgrounds');
-    }
-    if (req.session.returnTo) { //for this stateful experience most webapps just us popups(something is needed for the reviews)
-        res.locals.returnTo = req.session.returnTo;
     }
     next();
 }
