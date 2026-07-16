@@ -5,7 +5,14 @@ const upload = multer({ storage });
 const router = express.Router();
 const campgrounds = require('../controllers/campgrounds')
 const { catchAsync } = require('../utils/errorHandler');
-const { isLoggedIn, isAuthor, validateCampground } = require('../utils/middlewares');
+const {
+    isLoggedIn,
+    isAuthor,
+    validateCampground,
+    validateObjectId
+} = require('../utils/middlewares');
+
+router.param('id', validateObjectId('id', 'campground ID'));
 
 router.route('/')
     .get(catchAsync(campgrounds.index))
@@ -15,9 +22,9 @@ router.get('/new', isLoggedIn, campgrounds.renderAddCampForm);
 
 router.route('/:id')
     .get(catchAsync(campgrounds.showCamp))
-    .put(isLoggedIn, isAuthor, upload.array('image'), validateCampground, catchAsync(campgrounds.updateCamp))
-    .delete(isLoggedIn, isAuthor, catchAsync(campgrounds.deleteCamp));
+    .put(isLoggedIn, catchAsync(isAuthor), upload.array('image'), validateCampground, catchAsync(campgrounds.updateCamp))
+    .delete(isLoggedIn, catchAsync(isAuthor), catchAsync(campgrounds.deleteCamp));
 
-router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(campgrounds.renderEditCampForm));
+router.get('/:id/edit', isLoggedIn, catchAsync(isAuthor), catchAsync(campgrounds.renderEditCampForm));
 
 module.exports = router;

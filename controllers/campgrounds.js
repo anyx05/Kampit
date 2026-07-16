@@ -1,6 +1,7 @@
 
 const Campground = require('../models/campgrounds');
 const { cloudinary } = require('../utils/cloudinary_config');
+const { ExpressError } = require('../utils/errorHandler');
 const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
 const mapBoxToken = process.env.MAPBOX_TOKEN;
 const geocoder = mbxGeocoding({ accessToken: mapBoxToken });
@@ -8,7 +9,18 @@ const geocoder = mbxGeocoding({ accessToken: mapBoxToken });
 
 module.exports.index = async (req, res) => {
     const campgrounds = await Campground.find({});
-    res.render('campgrounds/index', { campgrounds });
+    const campgroundMapData = {
+        type: 'FeatureCollection',
+        features: campgrounds
+            .map((campground) => typeof campground.toJSON === 'function' ? campground.toJSON() : campground)
+            .filter((campground) => campground?.geometry)
+            .map((campground) => ({
+                type: 'Feature',
+                geometry: campground.geometry,
+                properties: campground.properties || {}
+            }))
+    };
+    res.render('campgrounds/index', { campgrounds, campgroundMapData });
 }
 
 module.exports.renderAddCampForm = (req, res) => {
@@ -39,9 +51,9 @@ module.exports.showCamp = async (req, res, next) => {
         .populate({ path: 'reviews', populate: { path: 'author' } })
         .populate('author');
     if (!campground) {
-        req.flash('error', 'Campground not found!');
-        return res.redirect('/campgrounds');
+        throw new ExpressError('Campground not found.', 404);
     }
+    campground.reviews = (campground.reviews || []).filter(Boolean);
     // Calculate total rating and mean rating
     let totalRating = 0;
     let reviewCount = campground.reviews.length;
@@ -56,12 +68,18 @@ module.exports.showCamp = async (req, res, next) => {
 
 module.exports.renderEditCampForm = async (req, res, next) => {
     const campground = await Campground.findById(req.params.id);
+    if (!campground) {
+        throw new ExpressError('Campground not found.', 404);
+    }
     res.render('campgrounds/edit_camp', { campground });
 }
 
 module.exports.updateCamp = async (req, res) => {
     const { id } = req.params;
     const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
+    if (!campground) {
+        throw new ExpressError('Campground not found.', 404);
+    }
     const addedImages = req.files.map((img) => ({ filename: img.filename, url: img.path }));
     const allDeleted = req.body.deletedImages.every((imageUrl, index) => {
         return imageUrl === campground.images[index].filename;
@@ -85,7 +103,10 @@ module.exports.updateCamp = async (req, res) => {
 
 module.exports.deleteCamp = async (req, res) => {
     const { id } = req.params;
-    await Campground.findByIdAndDelete(id);
+    const campground = await Campground.findByIdAndDelete(id);
+    if (!campground) {
+        throw new ExpressError('Campground not found.', 404);
+    }
     req.flash('success', 'Campground has been deleted.')
     res.redirect('/campgrounds');
 }
