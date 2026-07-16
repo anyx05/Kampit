@@ -26,7 +26,11 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "build": "tailwindcss -i public/styles/main.css -o public/styles/tailwind.css --watch"
+    "start": "node app.js",
+    "dev": "node --watch app.js",
+    "build": "npm run build:css",
+    "build:css": "tailwindcss -i public/styles/main.css -o public/styles/tailwind.css --minify",
+    "watch:css": "tailwindcss -i public/styles/main.css -o public/styles/tailwind.css --watch"
   },
   "keywords": [],
   "author": "",
