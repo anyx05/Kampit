@@ -14,6 +14,7 @@ const { cloudinary } = require('../utils/cloudinary_config');
 const originalCampgroundFindById = Campground.findById;
 const originalReviewSave = Review.prototype.save;
 const originalCloudinaryDestroy = cloudinary.uploader.destroy;
+const originalForwardGeocode = campgroundController._test.geocoder.forwardGeocode;
 
 const validCampground = () => ({
     title: '  Forest Camp  ',
@@ -29,6 +30,7 @@ test.afterEach(() => {
     Campground.findById = originalCampgroundFindById;
     Review.prototype.save = originalReviewSave;
     cloudinary.uploader.destroy = originalCloudinaryDestroy;
+    campgroundController._test.geocoder.forwardGeocode = originalForwardGeocode;
 });
 
 test('User schema normalizes identity fields and rejects invalid values', async () => {
@@ -137,6 +139,11 @@ test('campground updates allowlist editable fields and ignore protected-field at
     };
 
     Campground.findById = async () => campground;
+    campgroundController._test.geocoder.forwardGeocode = () => ({
+        send: async () => ({
+            body: { features: [{ geometry: { type: 'Point', coordinates: [26.72, 58.38] } }] }
+        })
+    });
     cloudinary.uploader.destroy = async () => assert.fail('an unowned image must not be deleted');
 
     const redirects = [];
@@ -171,7 +178,7 @@ test('campground updates allowlist editable fields and ignore protected-field at
     });
     assert.equal(campground.author, originalAuthor);
     assert.deepEqual(campground.reviews, [originalReview]);
-    assert.deepEqual(campground.geometry, originalGeometry);
+    assert.deepEqual(campground.geometry, { type: 'Point', coordinates: [26.72, 58.38] });
     assert.deepEqual(campground.images, [
         { filename: 'Kampit/owned', url: 'https://example.com/owned.jpg' }
     ]);
