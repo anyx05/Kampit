@@ -1,4 +1,11 @@
 <% layout('layouts/boilerplate') %>
+<%
+  const campgroundAuthor = campground.author || null;
+  const reviews = Array.isArray(campground.reviews) ? campground.reviews.filter(Boolean) : [];
+  const sameId = (left, right) => Boolean(
+    left && right && String(left._id || left) === String(right._id || right)
+  );
+%>
 <link
   href="https://api.mapbox.com/mapbox-gl-js/v3.9.3/mapbox-gl.css"
   rel="stylesheet"
@@ -53,15 +60,26 @@
           alt=""
         />
       </div>
-      <% } else { %> <% for( let img of campground.images ) { %>
+      <% } else { %> <% for (let imageIndex = 0; imageIndex < campground.images.length; imageIndex++) { %>
+      <% const img = campground.images[imageIndex]; %>
+      <% const imageSource = campground.seedMetadata?.imageSources?.[imageIndex]; %>
       <div
         class="h-full absolute top-0 opacity-0 transition-opacity duration-1000 ease-in-out carousel-item"
       >
         <img
           class="h-full w-full max-md:rounded-t-lg md:rounded-l-lg"
           src="<%= img.url %>"
-          alt=""
+          alt="<%= campground.title %>"
         />
+        <% if (imageSource?.attribution) { %>
+        <p class="absolute bottom-0 left-0 right-0 bg-black/60 px-2 py-1 text-xs text-white">
+          <% if (imageSource.sourceUrl) { %>
+          <a class="underline" href="<%= imageSource.sourceUrl %>" target="_blank" rel="noopener noreferrer"><%= imageSource.attribution %></a>
+          <% } else { %>
+          <%= imageSource.attribution %>
+          <% } %>
+        </p>
+        <% } %>
       </div>
       <% } %> <% } %>
       <!-- Slider controls -->
@@ -128,12 +146,18 @@
     </h3>
     <p class="mb-6 font-normal text-gray-800"><%= campground.description %></p>
     <div class="flex items-center justify-between">
+      <% if (campground.seedManaged) { %>
+      <p class="text-primary-lt text-lg font-bold w-1/2">
+        No nightly fee<span class="block text-base font-normal">GSB application required</span>
+      </p>
+      <% } else { %>
       <p class="text-primary-lt text-lg font-bold w-1/2">
         $<%= campground.price %><span class="text-base font-normal"
           >/night</span
         >
       </p>
-      <% if (signedUser && (campground.author.equals(signedUser._id))) { %>
+      <% } %>
+      <% if (sameId(campgroundAuthor, signedUser)) { %>
       <div class="flex">
         <!-- Edit Button -->
         <a href="/campgrounds/<%= campground._id %>/edit">
@@ -173,7 +197,7 @@
       <p>
         <span class="italic text-gray-500 text-sm">listed by:</span>
         <span class="text-primary-lt font-bold hover:underline">
-          <a href="#"> <%= campground.author.username %> </a>
+          <a href="#"> <%= campgroundAuthor?.username || 'Deleted user' %> </a>
         </span>
       </p>
       <% } %>
@@ -254,17 +278,18 @@
 
 <!-- Reviews Section -->
 <section class="relative max-w-sm md:max-w-4xl mx-auto mt-4">
-  <% if (campground.reviews.length !==0) { %>
+  <% if (reviews.length !==0) { %>
   <h3 class="text-xl font-semibold text-gray-900 inline-block">All Reviews</h3>
   <span class="absolute right-0">Sort by </span>
   <div class="mt-2 flex flex-col divide-y divide-info">
-    <% for (let review of campground.reviews) { %>
+    <% for (let review of reviews) { %>
+    <% const reviewAuthorName = review.author?.username || 'Deleted user'; %>
     <div class="py-2">
       <div class="flex content-center">
         <p
           class="mr-4 w-8 h-8 rounded-full cursor-pointer bg-secondary text-white font-bold text-center text-2xl leading-8"
         >
-          <%=review.author.username.slice(0,1).toUpperCase()%>
+          <%= reviewAuthorName.slice(0,1).toUpperCase() %>
         </p>
         <div class="grow flex flex-col">
           <div class="flex w-fit bg-primary rounded-xl p-1">
@@ -282,11 +307,11 @@
             <% } %>
           </div>
           <p class="text-base font-semibold text-gray-900">
-            <%= review.author.username %>
+            <%= reviewAuthorName %>
           </p>
         </div>
         <div class="relative">
-          <% if (signedUser && signedUser.equals(review.author._id)) { %>
+          <% if (sameId(signedUser, review.author)) { %>
           <button
             class="comment-btn inline-flex p-2 text-sm font-medium text-center text-gray-700 bg-white rounded-lg hover:bg-info"
           >

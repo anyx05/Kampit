@@ -1,23 +1,20 @@
 {
   "dependencies": {
-    "@mapbox/mapbox-sdk": "^0.16.1",
-    "cloudinary": "^1.41.3",
+    "@mapbox/mapbox-sdk": "^0.16.2",
+    "cloudinary": "^2.10.0",
     "connect-flash": "^0.1.1",
     "connect-mongo": "^5.1.0",
-    "dotenv": "^16.4.7",
+    "dotenv": "^16.6.1",
     "ejs": "^3.1.10",
     "ejs-mate": "^4.0.0",
-    "express": "^4.19.2",
+    "express": "^4.22.2",
     "express-mongo-sanitize": "^2.2.0",
-    "express-session": "^1.18.0",
-    "express-validator": "^7.2.1",
-    "helmet": "^8.0.0",
-    "joi": "^17.13.3",
-    "mapbox-gl": "^3.9.3",
+    "express-session": "^1.19.0",
+    "express-validator": "^7.3.2",
+    "helmet": "^8.3.0",
     "method-override": "^3.0.0",
-    "mongoose": "^8.5.1",
-    "multer": "^1.4.5-lts.1",
-    "multer-storage-cloudinary": "^4.0.0",
+    "mongoose": "^8.24.1",
+    "multer": "^2.2.0",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^8.0.0"
@@ -26,15 +23,31 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "build": "tailwindcss -i public/styles/main.css -o public/styles/tailwind.css --watch"
+    "start": "node app.js",
+    "dev": "node --watch app.js",
+    "test": "node --test test/unit/*.test.js test/integration/*.test.js test/smoke/*.test.js",
+    "test:unit": "node --test test/unit/*.test.js",
+    "test:integration": "node --test test/integration/*.test.js",
+    "test:smoke": "node --test test/smoke/*.test.js",
+    "test:watch": "node --test --watch test/unit/*.test.js test/integration/*.test.js test/smoke/*.test.js",
+    "seed:dry": "node seeds/gsb-camps/cli.js --dry-run",
+    "seed:gsb": "node seeds/gsb-camps/cli.js --execute",
+    "seed:images": "node seeds/gsb-camps/images.js",
+    "seed:verify": "node seeds/gsb-camps/verify.js",
+    "build": "npm run build:css",
+    "build:css": "tailwindcss -i public/styles/main.css -o public/styles/tailwind.css --minify",
+    "watch:css": "tailwindcss -i public/styles/main.css -o public/styles/tailwind.css --watch"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
+  "engines": {
+    "node": ">=24 <25"
+  },
   "devDependencies": {
-    "autoprefixer": "^10.4.19",
-    "postcss": "^8.4.40",
-    "tailwindcss": "^3.4.6"
+    "autoprefixer": "^10.5.4",
+    "postcss": "^8.5.19",
+    "tailwindcss": "^3.4.19"
   }
 }
