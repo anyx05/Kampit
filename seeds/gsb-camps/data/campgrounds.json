@@ -1,587 +1,174 @@
 {
   "dataset": "gsb-camps",
-  "version": "2026-07-official-review-2",
-  "imageRightsDeclaration": {
-    "basis": "user-confirmed-reuse-no-attribution",
-    "confirmedAt": "2026-07-17",
-    "confirmationNote": "Project owner confirmed that all local seed images are either privately taken or otherwise reusable without source-page or attribution requirements."
-  },
+  "version": "2026-07-review-1",
   "records": [
     {
       "seedKey": "gsb-aydin-efeler",
       "title": "Aydın Efeler Gençlik Kampı",
-      "location": "Davutlar Mahallesi, Özgürcan Gözmen Sokak No:7, Kuşadası, Aydın",
-      "description": "Kuşadası'nın Davutlar sahilinde yer alan GSB gençlik kampıdır. Program dönemlerinde yüzme, spor, kültür ve takım çalışması etkinlikleri sunulur; katılım başvuru ve kabul esasına bağlıdır.",
-      "price": 0,
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          27.261521,
-          37.7649
-        ]
-      },
-      "sourceUrls": [
-        "https://genclikhizmetleri.gov.tr/wp-content/uploads/genclik-kamplari/genclik-kamplari-aydin-efeler.pdf",
-        "https://genclikhizmetleri.gov.tr/bakan-bak-duyurdu-2025-gsb-yaz-genclik-kamplari-basladi/"
-      ],
-      "sourceImages": [
-        {
-          "sourcePath": "source-images/gsb-aydin-efeler-01.jpg",
-          "sourceUrl": null,
-          "attribution": null
-        },
-        {
-          "sourcePath": "source-images/gsb-aydin-efeler-02.jpg",
-          "sourceUrl": null,
-          "attribution": null
-        },
-        {
-          "sourcePath": "source-images/gsb-aydin-efeler-03.jpg",
-          "sourceUrl": null,
-          "attribution": null
-        }
-      ],
-      "verification": {
-        "identity": true,
-        "location": true,
-        "coordinates": true,
-        "content": true,
-        "pricing": true,
-        "imageRights": true
-      },
-      "notes": "GSB program facility, not walk-in nightly lodging. Price 0 means no nightly charge: current eligibility, dates and acceptance still apply. Facility-level map pin reviewed 2026-07-17; entrance was not field-verified. Image reuse without attribution was confirmed by the project owner."
+      "location": "Kuşadası Davutlar, Aydın",
+      "description": null,
+      "price": null,
+      "geometry": null,
+      "sourceUrls": [],
+      "sourceImages": [],
+      "verification": { "identity": false, "location": false, "coordinates": false, "content": false, "pricing": false, "imageRights": false },
+      "notes": "Candidate name and location recovered from the isolated legacy file; spelling normalized only."
     },
     {
       "seedKey": "gsb-samsun-19-mayis",
       "title": "Samsun 19 Mayıs Gençlik Kampı",
-      "location": "Erenköy Mahallesi, Fatih Caddesi No:375/1, Dereköy, 19 Mayıs, Samsun",
-      "description": "Dereköy'de Karadeniz kıyısında bulunan GSB deniz kampıdır. Dönem programlarında yüzme, spor, sanat ve kişisel gelişim etkinlikleri düzenlenir; katılım başvuru ve kabul gerektirir.",
-      "price": 0,
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          36.142645,
-          41.449486
-        ]
-      },
-      "sourceUrls": [
-        "https://genclikhizmetleri.gov.tr/wp-content/uploads/genclik-kamplari/genclik-kamplari-samsun-19-mayis.pdf",
-        "https://genclikhizmetleri.gov.tr/bakan-bak-duyurdu-2025-gsb-yaz-genclik-kamplari-basladi/",
-        "https://yandex.com.tr/maps/org/samsun_19_mayis_genclik_kampi/3662166800/"
-      ],
-      "sourceImages": [
-        {
-          "sourcePath": "source-images/gsb-samsun-19-mayis-01.jpg",
-          "sourceUrl": null,
-          "attribution": null
-        },
-        {
-          "sourcePath": "source-images/gsb-samsun-19-mayis-02.jpg",
-          "sourceUrl": null,
-          "attribution": null
-        }
-      ],
-      "verification": {
-        "identity": true,
-        "location": true,
-        "coordinates": true,
-        "content": true,
-        "pricing": true,
-        "imageRights": true
-      },
-      "notes": "GSB program facility, not walk-in nightly lodging. Price 0 means no nightly charge: current eligibility, dates and acceptance still apply. Official address and facility-level map pin reviewed 2026-07-17; entrance was not field-verified. Image reuse without attribution was confirmed by the project owner."
+      "location": "Dereköy, Ondokuzmayıs, Samsun",
+      "description": null,
+      "price": null,
+      "geometry": null,
+      "sourceUrls": [],
+      "sourceImages": [],
+      "verification": { "identity": false, "location": false, "coordinates": false, "content": false, "pricing": false, "imageRights": false },
+      "notes": "Candidate name and location recovered from the isolated legacy file; spelling normalized only."
     },
     {
       "seedKey": "gsb-hatay-arsuz-ulucinar",
       "title": "Hatay Arsuz Uluçınar Gençlik Kampı",
-      "location": "Gözcüler Mahallesi, Altın Sokak No:1, Arsuz, Hatay",
-      "description": "Arsuz kıyısındaki GSB gençlik kampıdır. Yayınlanan dönem programları spor, yüzme, sanat, kültür ve takım çalışması etkinliklerini içerir; katılım başvuru ve kabul esasına bağlıdır.",
-      "price": 0,
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          35.904295,
-          36.425932
-        ]
-      },
-      "sourceUrls": [
-        "https://genclikhizmetleri.gov.tr/wp-content/uploads/genclik-kamplari/genclik-kamplari-hatay-arsuz.pdf",
-        "https://genclikhizmetleri.gov.tr/bakan-bak-duyurdu-2025-gsb-yaz-genclik-kamplari-basladi/",
-        "https://yandex.com.tr/maps/org/hatay_iskenderun_ulucinar_genclik_kampi/224333184024/"
-      ],
-      "sourceImages": [
-        {
-          "sourcePath": "source-images/gsb-hatay-arsuz-ulucinar-01.jpg",
-          "sourceUrl": null,
-          "attribution": null
-        }
-      ],
-      "verification": {
-        "identity": true,
-        "location": true,
-        "coordinates": true,
-        "content": true,
-        "pricing": true,
-        "imageRights": true
-      },
-      "notes": "GSB program facility, not walk-in nightly lodging. Price 0 means no nightly charge: current eligibility, dates and acceptance still apply. Official address and facility-level map pin reviewed 2026-07-17; entrance was not field-verified. Image reuse without attribution was confirmed by the project owner."
+      "location": "Arsuz, Hatay",
+      "description": null,
+      "price": null,
+      "geometry": null,
+      "sourceUrls": [],
+      "sourceImages": [],
+      "verification": { "identity": false, "location": false, "coordinates": false, "content": false, "pricing": false, "imageRights": false },
+      "notes": "Candidate name and location recovered from the isolated legacy file; spelling normalized only."
     },
     {
       "seedKey": "gsb-mersin-silifke-akkum",
       "title": "Mersin Silifke Akkum Gençlik Kampı",
-      "location": "Atayurt Mahallesi, Bakanlıklar Caddesi No:7, Silifke, Mersin",
-      "description": "Silifke'nin Atayurt bölgesindeki GSB gençlik kampıdır. Program dönemlerinde spor, sosyal gelişim ve uygulamalı yaşam becerisi etkinliklerine ev sahipliği yapar; katılım ilan edilen koşullara bağlıdır.",
-      "price": 0,
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          34.073576,
-          36.374158
-        ]
-      },
-      "sourceUrls": [
-        "https://genclikhizmetleri.gov.tr/projelerimiz/temel-yasam-becerileri-atolyeleri/",
-        "https://genclikhizmetleri.gov.tr/gencler-mikro-is-oyunlari-ile-gelecege-hazirlaniyor/",
-        "https://genclikhizmetleri.gov.tr/bakan-bak-duyurdu-2025-gsb-yaz-genclik-kamplari-basladi/"
-      ],
-      "sourceImages": [
-        {
-          "sourcePath": "source-images/gsb-mersin-silifke-akkum-01.jpg",
-          "sourceUrl": null,
-          "attribution": null
-        },
-        {
-          "sourcePath": "source-images/gsb-mersin-silifke-akkum-02.jpg",
-          "sourceUrl": null,
-          "attribution": null
-        },
-        {
-          "sourcePath": "source-images/gsb-mersin-silifke-akkum-03.jpg",
-          "sourceUrl": null,
-          "attribution": null
-        },
-        {
-          "sourcePath": "source-images/gsb-mersin-silifke-akkum-04.jpg",
-          "sourceUrl": null,
-          "attribution": null
-        }
-      ],
-      "verification": {
-        "identity": true,
-        "location": true,
-        "coordinates": true,
-        "content": true,
-        "pricing": true,
-        "imageRights": true
-      },
-      "notes": "GSB program facility, not walk-in nightly lodging. Price 0 means no nightly charge: current eligibility, dates and acceptance still apply. Address and facility-level map pin reviewed 2026-07-17; entrance was not field-verified. Image reuse without attribution was confirmed by the project owner."
+      "location": "Akkum, Silifke, Mersin",
+      "description": null,
+      "price": null,
+      "geometry": null,
+      "sourceUrls": [],
+      "sourceImages": [],
+      "verification": { "identity": false, "location": false, "coordinates": false, "content": false, "pricing": false, "imageRights": false },
+      "notes": "Candidate name and location recovered from the isolated legacy file; spelling normalized only."
     },
     {
       "seedKey": "gsb-mersin-mehmet-akif-ersoy",
       "title": "Mersin Mehmet Akif Ersoy Gençlik Kampı",
-      "location": "Atakent Mahallesi, Bakanlıklar Caddesi No:179A, Silifke, Mersin",
-      "description": "Silifke'nin Atakent kıyısındaki GSB gençlik kampıdır. Tesiste dönemsel spor, kültür, takım çalışması ve temel yaşam becerisi programları yürütülür; katılım kabul koşullarına bağlıdır.",
-      "price": 0,
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          34.072739,
-          36.378313
-        ]
-      },
-      "sourceUrls": [
-        "https://genclikhizmetleri.gov.tr/projelerimiz/temel-yasam-becerileri-atolyeleri/",
-        "https://genclikhizmetleri.gov.tr/genclik-ve-spor-bakanligi-2025te-43-genclik-kampiyla-genclere-kapilarini-acti/",
-        "https://genclikhizmetleri.gov.tr/bakan-bak-duyurdu-2025-gsb-yaz-genclik-kamplari-basladi/",
-        "https://yandex.com.tr/maps/org/mersin_mehmet_akif_ersoy_genclik_kampi/152800446605/"
-      ],
-      "sourceImages": [
-        {
-          "sourcePath": "source-images/gsb-mersin-mehmet-akif-ersoy-01.jpg",
-          "sourceUrl": null,
-          "attribution": null
-        },
-        {
-          "sourcePath": "source-images/gsb-mersin-mehmet-akif-ersoy-02.jpg",
-          "sourceUrl": null,
-          "attribution": null
-        }
-      ],
-      "verification": {
-        "identity": true,
-        "location": true,
-        "coordinates": true,
-        "content": true,
-        "pricing": true,
-        "imageRights": true
-      },
-      "notes": "GSB program facility, not walk-in nightly lodging. Price 0 means no nightly charge: current eligibility, dates and acceptance still apply. Facility-level map address and pin reviewed 2026-07-17; entrance was not field-verified. Image reuse without attribution was confirmed by the project owner."
+      "location": "Atayurt, Mersin",
+      "description": null,
+      "price": null,
+      "geometry": null,
+      "sourceUrls": [],
+      "sourceImages": [],
+      "verification": { "identity": false, "location": false, "coordinates": false, "content": false, "pricing": false, "imageRights": false },
+      "notes": "Candidate name and location recovered from the isolated legacy file; spelling normalized only."
     },
     {
       "seedKey": "gsb-mersin-silifke-23-nisan",
       "title": "Mersin Silifke 23 Nisan Gençlik Kampı",
-      "location": "Atayurt Mahallesi, Bakanlıklar Caddesi No:180/A, Kapızlı, Silifke, Mersin",
-      "description": "Kapızlı sahilindeki GSB deniz kampıdır. Program dönemlerinde yüzme, takım sporları, kültür ve kişisel gelişim etkinlikleri düzenlenir; katılım başvuru ve kabul gerektirir.",
-      "price": 0,
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          34.072847,
-          36.379581
-        ]
-      },
-      "sourceUrls": [
-        "https://genclikhizmetleri.gov.tr/wp-content/uploads/genclik-kamplari/genclik-kamplari-mersin-23-nisan.pdf",
-        "https://genclikhizmetleri.gov.tr/bakan-bak-duyurdu-2025-gsb-yaz-genclik-kamplari-basladi/",
-        "https://yandex.com.tr/maps/org/mersin_silifke_23_nisan_genclik_kampi/118417578084/"
-      ],
-      "sourceImages": [
-        {
-          "sourcePath": "source-images/gsb-mersin-silifke-23-nisan-01.jpg",
-          "sourceUrl": null,
-          "attribution": null
-        }
-      ],
-      "verification": {
-        "identity": true,
-        "location": true,
-        "coordinates": true,
-        "content": true,
-        "pricing": true,
-        "imageRights": true
-      },
-      "notes": "The official information package uses No:180/A while the map provider labels the adjacent place No:181A. Official address retained. GSB program facility, not walk-in nightly lodging; price 0 means no nightly charge and participation conditions still apply. Entrance was not field-verified. Image reuse without attribution was confirmed by the project owner."
+      "location": "Kapızlı, Silifke, Mersin",
+      "description": null,
+      "price": null,
+      "geometry": null,
+      "sourceUrls": [],
+      "sourceImages": [],
+      "verification": { "identity": false, "location": false, "coordinates": false, "content": false, "pricing": false, "imageRights": false },
+      "notes": "Candidate name and location recovered from the isolated legacy file; spelling normalized only."
     },
     {
       "seedKey": "gsb-mersin-maliye",
       "title": "Mersin Maliye Gençlik Kampı",
-      "location": "Gaziçiftliği Mahallesi, Bakanlıklar Caddesi, Atayurt, Silifke, Mersin",
-      "description": "Silifke'nin Kapızlı kıyısında GSB programlarında kullanılmış deniz kampı tesisidir. Geçmiş programlarda spor, deniz, kültür ve sosyal gelişim etkinlikleri düzenlenmiştir; güncel dönem durumu ayrıca doğrulanmalıdır.",
-      "price": 0,
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          34.076376,
-          36.3887
-        ]
-      },
-      "sourceUrls": [
-        "https://genclikhizmetleri.gov.tr/hizmetlerimiz/genclik-merkezleri/iklim-farkindaligi-ve-genclik-hareketi/",
-        "https://mersin.gsb.gov.tr/HaberDetaylari/1/232907/genclik-kampi-kapanis-programi-ile-sona-erdi.aspx",
-        "https://genclikhizmetleri.gov.tr/bakan-bak-duyurdu-2025-gsb-yaz-genclik-kamplari-basladi/",
-        "https://ziraat.siirt.edu.tr/dosya/aktivite/genclik-kampi-2-siirt-2025415132052288.pdf",
-        "https://teminmatik.com.tr/ihale_detay.php?id=29863"
-      ],
-      "sourceImages": [
-        {
-          "sourcePath": "source-images/gsb-mersin-maliye-01.jpg",
-          "sourceUrl": null,
-          "attribution": null
-        },
-        {
-          "sourcePath": "source-images/gsb-mersin-maliye-02.jpg",
-          "sourceUrl": null,
-          "attribution": null
-        }
-      ],
-      "verification": {
-        "identity": true,
-        "location": true,
-        "coordinates": true,
-        "content": true,
-        "pricing": true,
-        "imageRights": true
-      },
-      "notes": "Current operation is supported by a 2026 GSB transport procurement listing (İKN 2026/937751) and a government-university camp allocation document; no direct current facility profile was found. Price 0 represents GSB program participation rather than nightly lodging. Facility pin reviewed 2026-07-17; entrance was not field-verified. Image reuse without attribution was confirmed by the project owner."
+      "location": "Gaziçiftliği, Silifke, Mersin",
+      "description": null,
+      "price": null,
+      "geometry": null,
+      "sourceUrls": [],
+      "sourceImages": [],
+      "verification": { "identity": false, "location": false, "coordinates": false, "content": false, "pricing": false, "imageRights": false },
+      "notes": "Candidate name and location recovered from the isolated legacy file; spelling normalized only."
     },
     {
       "seedKey": "gsb-kocaeli-kefken",
       "title": "Kocaeli Kefken Gençlik Kampı",
-      "location": "Kefken Mahallesi, Şehit Oğuz Kır Caddesi No:263/14/1, Kandıra, Kocaeli",
-      "description": "Kefken kıyısındaki GSB deniz kampıdır. Dönem programlarında yüzme, kano, takım sporları, sanat ve kültür etkinlikleri sunulur; katılım başvuru ve kabul esasına bağlıdır.",
-      "price": 0,
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          30.235369,
-          41.179188
-        ]
-      },
-      "sourceUrls": [
-        "https://genclikhizmetleri.gov.tr/wp-content/uploads/genclik-kamplari/genclik-kamplari-kocaeli-kefken.pdf",
-        "https://genclikhizmetleri.gov.tr/bakan-bak-duyurdu-2025-gsb-yaz-genclik-kamplari-basladi/"
-      ],
-      "sourceImages": [
-        {
-          "sourcePath": "source-images/gsb-kocaeli-kefken-01.jpg",
-          "sourceUrl": null,
-          "attribution": null
-        },
-        {
-          "sourcePath": "source-images/gsb-kocaeli-kefken-02.jpg",
-          "sourceUrl": null,
-          "attribution": null
-        }
-      ],
-      "verification": {
-        "identity": true,
-        "location": true,
-        "coordinates": true,
-        "content": true,
-        "pricing": true,
-        "imageRights": true
-      },
-      "notes": "GSB program facility, not walk-in nightly lodging. Price 0 means no nightly charge: current eligibility, dates and acceptance still apply. Official address and facility-level map pin reviewed 2026-07-17; entrance was not field-verified. Image reuse without attribution was confirmed by the project owner."
+      "location": "Kandıra, Kocaeli",
+      "description": null,
+      "price": null,
+      "geometry": null,
+      "sourceUrls": [],
+      "sourceImages": [],
+      "verification": { "identity": false, "location": false, "coordinates": false, "content": false, "pricing": false, "imageRights": false },
+      "notes": "Candidate name and location recovered from the isolated legacy file; spelling normalized only."
     },
     {
       "seedKey": "gsb-bursa-karacaali",
       "title": "Bursa Karacaali Gençlik Kampı",
-      "location": "Karacaali Mahallesi, Karacaali Caddesi, 2 Nolu Sokak No:165, Gemlik, Bursa",
-      "description": "Gemlik'in Karacaali kıyısındaki GSB deniz kampıdır. Program dönemlerinde yüzme, kano, takım sporları, sanat ve kültür etkinlikleri düzenlenir; katılım başvuru ve kabul gerektirir.",
-      "price": 0,
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          29.055999,
-          40.478717
-        ]
-      },
-      "sourceUrls": [
-        "https://genclikhizmetleri.gov.tr/wp-content/uploads/genclik-kamplari/genclik-kamplari-bursa-karacaali.pdf",
-        "https://genclikhizmetleri.gov.tr/projelerimiz/temel-yasam-becerileri-atolyeleri/",
-        "https://genclikhizmetleri.gov.tr/bakan-bak-duyurdu-2025-gsb-yaz-genclik-kamplari-basladi/",
-        "https://yandex.com.tr/maps/org/karacaali_genclik_kampi_plaji/10413874870/"
-      ],
-      "sourceImages": [
-        {
-          "sourcePath": "source-images/gsb-bursa-karacaali-01.jpg",
-          "sourceUrl": null,
-          "attribution": null
-        },
-        {
-          "sourcePath": "source-images/gsb-bursa-karacaali-02.jpg",
-          "sourceUrl": null,
-          "attribution": null
-        },
-        {
-          "sourcePath": "source-images/gsb-bursa-karacaali-03.jpg",
-          "sourceUrl": null,
-          "attribution": null
-        }
-      ],
-      "verification": {
-        "identity": true,
-        "location": true,
-        "coordinates": true,
-        "content": true,
-        "pricing": true,
-        "imageRights": true
-      },
-      "notes": "GSB program facility, not walk-in nightly lodging. Price 0 means no nightly charge: current eligibility, dates and acceptance still apply. Official address and facility-level map pin reviewed 2026-07-17; entrance was not field-verified. Image reuse without attribution was confirmed by the project owner."
+      "location": "Gemlik, Bursa",
+      "description": null,
+      "price": null,
+      "geometry": null,
+      "sourceUrls": [],
+      "sourceImages": [],
+      "verification": { "identity": false, "location": false, "coordinates": false, "content": false, "pricing": false, "imageRights": false },
+      "notes": "Candidate name and location recovered from the isolated legacy file; spelling normalized only."
     },
     {
       "seedKey": "gsb-antalya-alaaddin-keykubat",
       "title": "Antalya Alaaddin Keykubat Gençlik Kampı",
-      "location": "Yeşilbayır Mahallesi, Döşemealtı, Antalya",
-      "description": "Döşemealtı'ndaki GSB gençlik kampıdır. Tesis dönemsel tematik kamplara ve spor, sosyal gelişim, takım çalışması ile temel yaşam becerisi etkinliklerine ev sahipliği yapar.",
-      "price": 0,
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          30.639121,
-          36.95904
-        ]
-      },
-      "sourceUrls": [
-        "https://genclikhizmetleri.gov.tr/projelerimiz/temel-yasam-becerileri-atolyeleri/",
-        "https://genclikhizmetleri.gov.tr/milli-yetkinlik-hamlesi-kampi-ii-basliyor/",
-        "https://genclikhizmetleri.gov.tr/bakan-bak-duyurdu-2025-gsb-yaz-genclik-kamplari-basladi/"
-      ],
-      "sourceImages": [
-        {
-          "sourcePath": "source-images/gsb-antalya-alaaddin-keykubat-01.jpg",
-          "sourceUrl": null,
-          "attribution": null
-        }
-      ],
-      "verification": {
-        "identity": true,
-        "location": true,
-        "coordinates": true,
-        "content": true,
-        "pricing": true,
-        "imageRights": true
-      },
-      "notes": "GSB program facility, not walk-in nightly lodging. Price 0 means no nightly charge: current eligibility, dates and acceptance still apply. Facility-level map pin reviewed 2026-07-17; precise street address and entrance were not field-verified. Image reuse without attribution was confirmed by the project owner."
+      "location": "Yeşilbayır, Döşemealtı, Antalya",
+      "description": null,
+      "price": null,
+      "geometry": null,
+      "sourceUrls": [],
+      "sourceImages": [],
+      "verification": { "identity": false, "location": false, "coordinates": false, "content": false, "pricing": false, "imageRights": false },
+      "notes": "Candidate name and location recovered from the isolated legacy file; spelling normalized only."
     },
     {
       "seedKey": "gsb-kastamonu-yolkonak",
       "title": "Kastamonu Yolkonak Gençlik Kampı",
-      "location": "Ankara Yolu 10. km, Kadıdağı Mevkii, Yolkonak Köyü, Kastamonu Merkez, Kastamonu",
-      "description": "Kadıdağı'nın doğal çevresindeki GSB doğa kampıdır. Programlarda doğa yürüyüşü, bisiklet, tırmanma, okçuluk, takım sporları, sanat ve kişisel gelişim etkinlikleri yer alır.",
-      "price": 0,
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          33.794267,
-          41.299218
-        ]
-      },
-      "sourceUrls": [
-        "https://genclikhizmetleri.gov.tr/wp-content/uploads/genclik-kamplari/genclik-kamplari-kastamonu-yolkonak.pdf",
-        "https://genclikhizmetleri.gov.tr/projelerimiz/temel-yasam-becerileri-atolyeleri/",
-        "https://genclikhizmetleri.gov.tr/bakan-bak-duyurdu-2025-gsb-yaz-genclik-kamplari-basladi/",
-        "https://yandex.com.tr/maps/org/kastamonu_yolkonak_genclik_kampi/179285851222/"
-      ],
-      "sourceImages": [
-        {
-          "sourcePath": "source-images/gsb-kastamonu-yolkonak-01.jpg",
-          "sourceUrl": null,
-          "attribution": null
-        },
-        {
-          "sourcePath": "source-images/gsb-kastamonu-yolkonak-02.jpg",
-          "sourceUrl": null,
-          "attribution": null
-        }
-      ],
-      "verification": {
-        "identity": true,
-        "location": true,
-        "coordinates": true,
-        "content": true,
-        "pricing": true,
-        "imageRights": true
-      },
-      "notes": "GSB program facility, not walk-in nightly lodging. Price 0 means no nightly charge: current eligibility, dates and acceptance still apply. Official address and facility-level map pin reviewed 2026-07-17; entrance was not field-verified. Image reuse without attribution was confirmed by the project owner. Kastamonu image 03 was intentionally removed from the intake set."
+      "location": "Kadı Dağı Yaylası, Kastamonu",
+      "description": null,
+      "price": null,
+      "geometry": null,
+      "sourceUrls": [],
+      "sourceImages": [],
+      "verification": { "identity": false, "location": false, "coordinates": false, "content": false, "pricing": false, "imageRights": false },
+      "notes": "Candidate name and location recovered from the isolated legacy file; spelling normalized only."
     },
     {
       "seedKey": "gsb-osmaniye-aslantas",
       "title": "Osmaniye Aslantaş Gençlik Kampı",
-      "location": "Kızyusuflu Köyü, Siteler Mahallesi, Kadirli, Osmaniye",
-      "description": "Kadirli'de doğal çevre içinde bulunan GSB doğa kampıdır. Programlarda yürüyüş, yüzme, okçuluk, takım sporları, sanat, kültür ve kişisel gelişim etkinlikleri düzenlenir.",
-      "price": 0,
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          36.254352,
-          37.308744
-        ]
-      },
-      "sourceUrls": [
-        "https://genclikhizmetleri.gov.tr/wp-content/uploads/genclik-kamplari/genclik-kamplari-osmaniye-aslantas.pdf",
-        "https://genclikhizmetleri.gov.tr/projelerimiz/temel-yasam-becerileri-atolyeleri/",
-        "https://genclikhizmetleri.gov.tr/bakan-bak-duyurdu-2025-gsb-yaz-genclik-kamplari-basladi/",
-        "https://yandex.com.tr/maps/org/osmaniye_aslantas_genclik_kampi/133102858850/"
-      ],
-      "sourceImages": [
-        {
-          "sourcePath": "source-images/gsb-osmaniye-aslantas-01.jpg",
-          "sourceUrl": null,
-          "attribution": null
-        },
-        {
-          "sourcePath": "source-images/gsb-osmaniye-aslantas-02.jpg",
-          "sourceUrl": null,
-          "attribution": null
-        },
-        {
-          "sourcePath": "source-images/gsb-osmaniye-aslantas-03.jpg",
-          "sourceUrl": null,
-          "attribution": null
-        }
-      ],
-      "verification": {
-        "identity": true,
-        "location": true,
-        "coordinates": true,
-        "content": true,
-        "pricing": true,
-        "imageRights": true
-      },
-      "notes": "The official GSB package uses Kızyusuflu/Siteler; the map provider labels the facility in neighboring Bahadırlı. Official address retained. Price 0 means no nightly charge and current participation conditions still apply. Entrance was not field-verified. Image reuse without attribution was confirmed by the project owner."
+      "location": "Kadirli, Osmaniye",
+      "description": null,
+      "price": null,
+      "geometry": null,
+      "sourceUrls": [],
+      "sourceImages": [],
+      "verification": { "identity": false, "location": false, "coordinates": false, "content": false, "pricing": false, "imageRights": false },
+      "notes": "Candidate name and location recovered from the isolated legacy file; spelling normalized only."
     },
     {
       "seedKey": "gsb-kirsehir-ahi-evran",
       "title": "Kırşehir Ahi Evran Gençlik Kampı",
-      "location": "Hirfanlı Barajı, 40302 Kaman, Kırşehir",
-      "description": "Hirfanlı Barajı çevresindeki GSB doğa kampıdır. Programlarda kano, bisiklet, tırmanma, okçuluk, takım sporları, sanat ve kişisel gelişim etkinlikleri yer alır.",
-      "price": 0,
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          33.533695,
-          39.267418
-        ]
-      },
-      "sourceUrls": [
-        "https://genclikhizmetleri.gov.tr/wp-content/uploads/genclik-kamplari/genclik-kamplari-kirsehir-ahi-evran.pdf",
-        "https://genclikhizmetleri.gov.tr/projelerimiz/temel-yasam-becerileri-atolyeleri/",
-        "https://genclikhizmetleri.gov.tr/bakan-bak-duyurdu-2025-gsb-yaz-genclik-kamplari-basladi/",
-        "https://yandex.com.tr/maps/org/kirsehir_ahi_evran_genclik_kampi/93721466689/"
-      ],
-      "sourceImages": [
-        {
-          "sourcePath": "source-images/gsb-kirsehir-ahi-evran-01.jpg",
-          "sourceUrl": null,
-          "attribution": null
-        },
-        {
-          "sourcePath": "source-images/gsb-kirsehir-ahi-evran-02.jpg",
-          "sourceUrl": null,
-          "attribution": null
-        }
-      ],
-      "verification": {
-        "identity": true,
-        "location": true,
-        "coordinates": true,
-        "content": true,
-        "pricing": true,
-        "imageRights": true
-      },
-      "notes": "GSB program facility, not walk-in nightly lodging. Price 0 means no nightly charge: current eligibility, dates and acceptance still apply. Official address and facility-level map pin reviewed 2026-07-17; entrance was not field-verified. Image reuse without attribution was confirmed by the project owner. Kırşehir image 03 was intentionally renumbered to 02 after the former duplicate 02 was removed."
+      "location": "Ahi Evran, Kırşehir",
+      "description": null,
+      "price": null,
+      "geometry": null,
+      "sourceUrls": [],
+      "sourceImages": [],
+      "verification": { "identity": false, "location": false, "coordinates": false, "content": false, "pricing": false, "imageRights": false },
+      "notes": "Candidate name and location recovered from the isolated legacy file; spelling normalized only."
     },
     {
       "seedKey": "gsb-manisa-sehzadeler",
       "title": "Manisa Şehzadeler Gençlik Kampı",
-      "location": "Sarıağa Mahallesi, Kırkağaç, Manisa",
-      "description": "Kırkağaç'ın Sarıağa bölgesindeki GSB doğa kampıdır. Dönemsel programlarda takım sporları, okçuluk, yüzme, doğa, sosyal gelişim ve temel yaşam becerisi etkinlikleri yürütülür.",
-      "price": 0,
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          27.665274,
-          39.139051
-        ]
-      },
-      "sourceUrls": [
-        "https://genclikhizmetleri.gov.tr/projelerimiz/temel-yasam-becerileri-atolyeleri/",
-        "https://genclikhizmetleri.gov.tr/hizmetlerimiz/genclik-merkezleri/iklim-farkindaligi-ve-genclik-hareketi/",
-        "https://genclikhizmetleri.gov.tr/bakan-bak-duyurdu-2025-gsb-yaz-genclik-kamplari-basladi/",
-        "https://yandex.com.tr/maps/org/manisa_sehzadeler_genclik_kampi/14744070991/"
-      ],
-      "sourceImages": [
-        {
-          "sourcePath": "source-images/gsb-manisa-sehzadeler-01.jpg",
-          "sourceUrl": null,
-          "attribution": null
-        },
-        {
-          "sourcePath": "source-images/gsb-manisa-sehzadeler-02.jpg",
-          "sourceUrl": null,
-          "attribution": null
-        }
-      ],
-      "verification": {
-        "identity": true,
-        "location": true,
-        "coordinates": true,
-        "content": true,
-        "pricing": true,
-        "imageRights": true
-      },
-      "notes": "GSB program facility, not walk-in nightly lodging. Price 0 means no nightly charge: current eligibility, dates and acceptance still apply. Facility-level map pin reviewed 2026-07-17; precise entrance was not field-verified. Image reuse without attribution was confirmed by the project owner."
+      "location": "Sarıağa, Kırkağaç, Manisa",
+      "description": null,
+      "price": null,
+      "geometry": null,
+      "sourceUrls": [],
+      "sourceImages": [],
+      "verification": { "identity": false, "location": false, "coordinates": false, "content": false, "pricing": false, "imageRights": false },
+      "notes": "Candidate name and location recovered from the isolated legacy file; spelling normalized only."
     }
   ]
 }
