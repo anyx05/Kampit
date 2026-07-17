@@ -10,13 +10,13 @@ const MongoStore = require('connect-mongo');
 const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
-const dns = require('node:dns');
 const path = require('path');
 const methodOverride = require('method-override');
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
 
 const { ExpressError } = require('./utils/errorHandler');
+const { configureDnsServers } = require('./utils/dns');
 const User = require('./models/user'); //used by passport
 
 passport.use(new LocalStrategy(User.authenticate()));
@@ -24,6 +24,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 const DATABASE_NAME = 'Kampit';
+const PRODUCTION_HOST = '0.0.0.0';
 const REQUIRED_ENVIRONMENT_VARIABLES = [
     'DB_URL',
     'SESSION_SECRET',
@@ -33,6 +34,38 @@ const REQUIRED_ENVIRONMENT_VARIABLES = [
     'CLOUDINARYKEY',
     'CLOUDINARYSECRET'
 ];
+
+function databaseNameFromUrl(value) {
+    try {
+        return decodeURIComponent(new URL(value).pathname.replace(/^\//, ''));
+    } catch {
+        return null;
+    }
+}
+
+function redactSecrets(value) {
+    let text = String(value ?? '');
+    const secretNames = [
+        'DB_URL',
+        'SESSION_SECRET',
+        'MONGO_STORE_SECRET',
+        'CLOUDINARYKEY',
+        'CLOUDINARYSECRET',
+        'SEED_AUTHOR_PASSWORD'
+    ];
+
+    for (const name of secretNames) {
+        const secret = process.env[name];
+        if (typeof secret === 'string' && secret.length > 0) {
+            text = text.replaceAll(secret, '[REDACTED]');
+        }
+    }
+
+    return text.replace(
+        /(mongodb(?:\+srv)?:\/\/)([^@\s]+)@/gi,
+        '$1[REDACTED]@'
+    );
+}
 
 function validateEnvironment() {
     const missingVariables = REQUIRED_ENVIRONMENT_VARIABLES.filter((name) => {
@@ -47,6 +80,11 @@ function validateEnvironment() {
     if (process.env.SESSION_SECRET === process.env.MONGO_STORE_SECRET) {
         throw new Error('SESSION_SECRET and MONGO_STORE_SECRET must be different values.');
     }
+
+    const configuredDatabase = databaseNameFromUrl(process.env.DB_URL);
+    if (configuredDatabase !== DATABASE_NAME) {
+        throw new Error(`DB_URL must use the /${DATABASE_NAME} database path.`);
+    }
 }
 
 function sessionCookieOptions(isProduction) {
@@ -56,22 +94,6 @@ function sessionCookieOptions(isProduction) {
         sameSite: 'lax',
         maxAge: 7 * 24 * 60 * 60 * 1000
     };
-}
-
-function configureDnsServers() {
-    if (!process.env.DNS_SERVERS) return;
-
-    const servers = process.env.DNS_SERVERS
-        .split(',')
-        .map((server) => server.trim())
-        .filter(Boolean);
-
-    if (!servers.length) {
-        throw new Error('DNS_SERVERS must contain at least one DNS server address.');
-    }
-
-    dns.setServers(servers);
-    console.log(`Configured ${servers.length} Node DNS resolver(s).`);
 }
 
 const scriptSrcUrls = [
@@ -169,7 +191,7 @@ function createApp() {
                     "'self'",
                     "blob:",
                     "data:",
-                    "https://res.cloudinary.com/dxyhaq7se/"
+                    `https://res.cloudinary.com/${process.env.CLOUDNAME}/`
                 ],
                 fontSrc: ["'self'", ...fontSrcUrls],
             },
@@ -202,17 +224,22 @@ function createApp() {
         const statusCode = err.statusCode || err.status || 500;
         if (!err.message) err.message = 'Oh No, Something Went Wrong!';
 
-        // Log the original request failure before attempting to render a page.
-        console.error(err);
+        // Keep expected client errors concise and redact configured secrets from
+        // unexpected stacks before they reach production logs.
+        const logDetail = statusCode >= 500 ? (err.stack || err.message) : err.message;
+        console.error(redactSecrets(`[${statusCode}] ${req.method} ${req.originalUrl}: ${logDetail}`));
+        const publicError = statusCode >= 500
+            ? new ExpressError('Oh No, Something Went Wrong!', statusCode)
+            : err;
         res.render('error', {
-            err,
+            err: publicError,
             statusCode,
             signedUser: res.locals.signedUser ?? null,
             success: res.locals.success ?? [],
             error: res.locals.error ?? []
         }, (renderError, html) => {
             if (renderError) {
-                console.error('Error page rendering failed:', renderError);
+                console.error(redactSecrets(`Error page rendering failed: ${renderError.stack || renderError.message}`));
                 return res.status(500).type('text/plain').send('500 - Oh No, Something Went Wrong!');
             }
             res.status(statusCode).send(html);
@@ -222,9 +249,9 @@ function createApp() {
     return app;
 }
 
-function listen(app, port) {
+function listen(app, port, host = PRODUCTION_HOST) {
     return new Promise((resolve, reject) => {
-        const server = app.listen(port, () => {
+        const server = app.listen(port, host, () => {
             server.off('error', reject);
             resolve(server);
         });
@@ -241,8 +268,8 @@ async function start() {
     console.log(`MongoDB ready (database: ${DATABASE_NAME}).`);
 
     const app = createApp();
-    await listen(app, port);
-    console.log(`Kampit listening on port ${port}.`);
+    await listen(app, port, PRODUCTION_HOST);
+    console.log(`Kampit listening on ${PRODUCTION_HOST}:${port}.`);
 }
 
 mongoose.connection.on('error', (err) => {
@@ -255,7 +282,7 @@ mongoose.connection.on('disconnected', () => {
 
 if (require.main === module) {
     start().catch((err) => {
-        console.error(`Application startup failed (${err.name}): ${err.message}`);
+        console.error(redactSecrets(`Application startup failed (${err.name}): ${err.message}`));
         process.exit(1);
     });
 }
@@ -263,6 +290,9 @@ if (require.main === module) {
 module.exports = {
     configureDnsServers,
     createApp,
+    databaseNameFromUrl,
+    listen,
+    redactSecrets,
     sessionCookieOptions,
     start,
     validateEnvironment

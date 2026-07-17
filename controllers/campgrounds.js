@@ -49,7 +49,11 @@ module.exports.index = async (req, res) => {
             .map((campground) => ({
                 type: 'Feature',
                 geometry: campground.geometry,
-                properties: campground.properties || {}
+                properties: {
+                    id: String(campground._id),
+                    title: campground.title,
+                    description: campground.description
+                }
             }))
     };
     res.render('campgrounds/index', { campgrounds, campgroundMapData });

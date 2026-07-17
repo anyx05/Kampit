@@ -20,6 +20,18 @@ const UserSchema = new Schema({
         maxlength: [320, 'Email cannot exceed 320 characters.'],
         match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Email must be valid.'],
         unique: true
+    },
+    seedKey: {
+        type: String,
+        trim: true,
+        unique: true,
+        sparse: true,
+        immutable: true
+    },
+    seedManaged: {
+        type: Boolean,
+        default: false,
+        index: true
     }
 }, { timestamps: true });
 

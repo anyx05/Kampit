@@ -1,18 +1,22 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const mongoose = require('mongoose');
+const { applyTestEnvironment } = require('../helpers/test-environment');
 
-process.env.MAPBOX_TOKEN ||= 'pk.eyJ1IjoidGVzdCJ9.test';
+applyTestEnvironment();
 
-const User = require('../models/user');
-const Campground = require('../models/campgrounds');
-const Review = require('../models/reviews');
-const campgroundController = require('../controllers/campgrounds');
-const reviewController = require('../controllers/reviews');
-const { cloudinary } = require('../utils/cloudinary_config');
+const User = require('../../models/user');
+const Campground = require('../../models/campgrounds');
+const Review = require('../../models/reviews');
+const campgroundController = require('../../controllers/campgrounds');
+const reviewController = require('../../controllers/reviews');
+const { cloudinary } = require('../../utils/cloudinary_config');
 
 const originalCampgroundFindById = Campground.findById;
+const originalCampgroundFindByIdAndUpdate = Campground.findByIdAndUpdate;
 const originalReviewSave = Review.prototype.save;
+const originalReviewFindById = Review.findById;
+const originalReviewFindByIdAndDelete = Review.findByIdAndDelete;
 const originalCloudinaryDestroy = cloudinary.uploader.destroy;
 const originalForwardGeocode = campgroundController._test.geocoder.forwardGeocode;
 
@@ -28,7 +32,10 @@ const validCampground = () => ({
 
 test.afterEach(() => {
     Campground.findById = originalCampgroundFindById;
+    Campground.findByIdAndUpdate = originalCampgroundFindByIdAndUpdate;
     Review.prototype.save = originalReviewSave;
+    Review.findById = originalReviewFindById;
+    Review.findByIdAndDelete = originalReviewFindByIdAndDelete;
     cloudinary.uploader.destroy = originalCloudinaryDestroy;
     campgroundController._test.geocoder.forwardGeocode = originalForwardGeocode;
 });
@@ -226,4 +233,31 @@ test('review creation ignores a submitted author and uses the signed-in user', a
     assert.equal(savedReview.createdAt, undefined);
     assert.equal(String(campground.reviews[0]._id), String(savedReview._id));
     assert.deepEqual(redirects, [`/campgrounds/${campground._id}`]);
+});
+
+test('review deletion removes both the campground reference and review document', async () => {
+    const campgroundId = new mongoose.Types.ObjectId();
+    const reviewId = new mongoose.Types.ObjectId();
+    const events = [];
+    Campground.findById = async () => ({ _id: campgroundId, reviews: [reviewId] });
+    Review.findById = async () => ({ _id: reviewId });
+    Campground.findByIdAndUpdate = async (id, update, options) => {
+        events.push(['pull', String(id), update, options]);
+    };
+    Review.findByIdAndDelete = async (id) => events.push(['delete', String(id)]);
+    const redirects = [];
+
+    await reviewController.deleteReviews({
+        params: { id: String(campgroundId), reviewId: String(reviewId) }
+    }, {
+        redirect(path) {
+            redirects.push(path);
+        }
+    });
+
+    assert.deepEqual(events, [
+        ['pull', String(campgroundId), { $pull: { reviews: String(reviewId) } }, { runValidators: true }],
+        ['delete', String(reviewId)]
+    ]);
+    assert.deepEqual(redirects, [`/campgrounds/${campgroundId}`]);
 });

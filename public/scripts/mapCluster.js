@@ -90,18 +90,28 @@ map.on('load', () => {
 
    map.on('click', 'unclustered-point', (e) => {
         const coordinates = e.features[0].geometry.coordinates.slice();
-        const {map_popUp} = e.features[0].properties;
+        const { id, title, description } = e.features[0].properties;
         if (['mercator', 'equirectangular'].includes(map.getProjection().name)) {
             while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
                 coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
             }
         }
 
+        const popupContent = document.createElement('div');
+        const heading = document.createElement('h3');
+        const link = document.createElement('a');
+        const summary = document.createElement('p');
+        const normalizedDescription = typeof description === 'string' ? description : '';
+
+        link.href = `/campgrounds/${encodeURIComponent(id)}`;
+        link.textContent = typeof title === 'string' ? title : 'Campground';
+        heading.append(link);
+        summary.textContent = `${normalizedDescription.slice(0, 30)}${normalizedDescription.length > 30 ? '...' : ''}`;
+        popupContent.append(heading, summary);
+
         new mapboxgl.Popup()
             .setLngLat(coordinates)
-            .setHTML(
-                map_popUp
-            )
+            .setDOMContent(popupContent)
             .addTo(map);
     });
 

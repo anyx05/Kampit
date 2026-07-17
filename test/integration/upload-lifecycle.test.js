@@ -2,13 +2,15 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const express = require('express');
 const mongoose = require('mongoose');
+const { request } = require('../helpers/http');
+const { applyTestEnvironment } = require('../helpers/test-environment');
 
-process.env.MAPBOX_TOKEN ||= 'pk.eyJ1IjoidGVzdCJ9.test';
+applyTestEnvironment();
 
-const Campground = require('../models/campgrounds');
-const campgroundController = require('../controllers/campgrounds');
-const cloudinaryImages = require('../utils/cloudinary_config');
-const campgroundRoutes = require('../routes/campgrounds');
+const Campground = require('../../models/campgrounds');
+const campgroundController = require('../../controllers/campgrounds');
+const cloudinaryImages = require('../../utils/cloudinary_config');
+const campgroundRoutes = require('../../routes/campgrounds');
 
 const originalMethods = {
     campgroundFindById: Campground.findById,
@@ -43,23 +45,6 @@ function responseRecorder() {
             this.redirects.push(path);
         }
     };
-}
-
-async function request(app, options = {}) {
-    const server = await new Promise((resolve, reject) => {
-        const listeningServer = app.listen(0, '127.0.0.1', () => resolve(listeningServer));
-        listeningServer.once('error', reject);
-    });
-
-    try {
-        return await fetch(`http://127.0.0.1:${server.address().port}/campgrounds`, {
-            method: 'POST',
-            redirect: 'manual',
-            ...options
-        });
-    } finally {
-        await new Promise((resolve, reject) => server.close((error) => error ? reject(error) : resolve()));
-    }
 }
 
 function uploadTestApp(middleware = cloudinaryImages.uploadCampgroundImages) {
@@ -100,7 +85,7 @@ test.afterEach(() => {
 test('Multer rejects unsupported image types, excessive counts, and oversized files', async () => {
     const invalidType = new FormData();
     invalidType.append('image', new Blob(['text'], { type: 'text/plain' }), 'camp.txt');
-    let response = await request(uploadTestApp(), { body: invalidType });
+    let response = await request(uploadTestApp(), '/campgrounds', { method: 'POST', body: invalidType });
     assert.equal(response.status, 400);
     assert.match(await response.text(), /JPEG or PNG/);
 
@@ -108,7 +93,7 @@ test('Multer rejects unsupported image types, excessive counts, and oversized fi
     for (let index = 0; index < cloudinaryImages.MAX_IMAGE_COUNT + 1; index += 1) {
         tooMany.append('image', new Blob(['x'], { type: 'image/png' }), `${index}.png`);
     }
-    response = await request(uploadTestApp(), { body: tooMany });
+    response = await request(uploadTestApp(), '/campgrounds', { method: 'POST', body: tooMany });
     assert.equal(response.status, 400);
     assert.match(await response.text(), /at most 5 images/);
 
@@ -118,7 +103,7 @@ test('Multer rejects unsupported image types, excessive counts, and oversized fi
         new Blob([Buffer.alloc(cloudinaryImages.MAX_IMAGE_SIZE_BYTES + 1)], { type: 'image/jpeg' }),
         'large.jpg'
     );
-    response = await request(uploadTestApp(), { body: tooLarge });
+    response = await request(uploadTestApp(), '/campgrounds', { method: 'POST', body: tooLarge });
     assert.equal(response.status, 413);
     assert.match(await response.text(), /5 MB or smaller/);
 });
@@ -132,7 +117,7 @@ test('multipart form fields are validated before Cloudinary upload starts', asyn
     form.append('campground[location]', 'Tartu');
     form.append('image', new Blob(['not uploaded'], { type: 'image/png' }), 'camp.png');
 
-    const response = await request(campgroundRouteApp(), { body: form });
+    const response = await request(campgroundRouteApp(), '/campgrounds', { method: 'POST', body: form });
     assert.equal(response.status, 400);
     assert.match(await response.text(), /Title is required/);
 });
@@ -197,6 +182,34 @@ test('MongoDB creation failure removes every newly uploaded image', async () => 
         /MongoDB create failed/
     );
     assert.deepEqual(destroyed, ['Kampit/one', 'Kampit/two']);
+});
+
+test('successful campground creation geocodes, uploads, saves, and redirects', async () => {
+    const uploadedImages = [{ filename: 'Kampit/created', url: 'https://example.com/created.jpg' }];
+    let savedCampground;
+    campgroundController._test.geocoder.forwardGeocode = geocodeResult();
+    cloudinaryImages.uploadImages = async () => uploadedImages;
+    cloudinaryImages.destroyImages = async () => assert.fail('successful uploads must not be removed');
+    Campground.prototype.save = async function saveCampground() {
+        savedCampground = this;
+        return this;
+    };
+
+    const flashes = [];
+    const res = responseRecorder();
+    await campgroundController.createCamp({
+        body: validBody(),
+        files: [{ buffer: Buffer.from('image') }],
+        user: { _id: new mongoose.Types.ObjectId() },
+        flash(...args) {
+            flashes.push(args);
+        }
+    }, res);
+
+    assert.deepEqual(savedCampground.geometry.toObject(), { type: 'Point', coordinates: [26.72, 58.38] });
+    assert.equal(savedCampground.images[0].filename, 'Kampit/created');
+    assert.deepEqual(flashes, [['success', 'Created new campground successfully!']]);
+    assert.deepEqual(res.redirects, [`/campgrounds/${savedCampground._id}`]);
 });
 
 test('updates tolerate absent deletedImages, re-geocode changes, and save once before cleanup', async () => {

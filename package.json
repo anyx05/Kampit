@@ -25,7 +25,15 @@
   "scripts": {
     "start": "node app.js",
     "dev": "node --watch app.js",
-    "test": "node --test",
+    "test": "node --test test/unit/*.test.js test/integration/*.test.js test/smoke/*.test.js",
+    "test:unit": "node --test test/unit/*.test.js",
+    "test:integration": "node --test test/integration/*.test.js",
+    "test:smoke": "node --test test/smoke/*.test.js",
+    "test:watch": "node --test --watch test/unit/*.test.js test/integration/*.test.js test/smoke/*.test.js",
+    "seed:dry": "node seeds/gsb-camps/cli.js --dry-run",
+    "seed:gsb": "node seeds/gsb-camps/cli.js --execute",
+    "seed:images": "node seeds/gsb-camps/images.js",
+    "seed:verify": "node seeds/gsb-camps/verify.js",
     "build": "npm run build:css",
     "build:css": "tailwindcss -i public/styles/main.css -o public/styles/tailwind.css --minify",
     "watch:css": "tailwindcss -i public/styles/main.css -o public/styles/tailwind.css --watch"

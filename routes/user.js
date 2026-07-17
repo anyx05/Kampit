@@ -3,7 +3,6 @@ const users = require('../controllers/users')
 const { catchAsync } = require('../utils/errorHandler');
 const { redirectIfLoggedIn } = require('../utils/middlewares');
 const { loadReturnTo } = require('../utils/auth');
-//might add Joi-validation later...
 
 const router = express.Router();
 const passport = require('passport');

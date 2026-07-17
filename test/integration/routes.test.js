@@ -4,14 +4,16 @@ const path = require('node:path');
 const express = require('express');
 const ejsMate = require('ejs-mate');
 const mongoose = require('mongoose');
+const { request } = require('../helpers/http');
+const { applyTestEnvironment } = require('../helpers/test-environment');
 
-process.env.MAPBOX_TOKEN ||= 'pk.eyJ1IjoidGVzdCJ9.test';
+applyTestEnvironment();
 
-const Campground = require('../models/campgrounds');
-const Review = require('../models/reviews');
-const campgroundRoutes = require('../routes/campgrounds');
-const reviewRoutes = require('../routes/reviews');
-const { ExpressError } = require('../utils/errorHandler');
+const Campground = require('../../models/campgrounds');
+const Review = require('../../models/reviews');
+const campgroundRoutes = require('../../routes/campgrounds');
+const reviewRoutes = require('../../routes/reviews');
+const { ExpressError } = require('../../utils/errorHandler');
 
 const originalCampgroundMethods = {
     find: Campground.find,
@@ -37,7 +39,7 @@ function createRouteApp({ authenticated = false } = {}) {
     const app = express();
     app.engine('ejs', ejsMate);
     app.set('view engine', 'ejs');
-    app.set('views', path.join(__dirname, '..', 'views'));
+    app.set('views', path.join(__dirname, '..', '..', 'views'));
     app.use(express.urlencoded({ extended: true }));
     app.use((req, res, next) => {
         req.isAuthenticated = () => authenticated;
@@ -63,22 +65,6 @@ function createRouteApp({ authenticated = false } = {}) {
     return app;
 }
 
-async function request(app, requestPath, options = {}) {
-    const server = await new Promise((resolve, reject) => {
-        const listeningServer = app.listen(0, '127.0.0.1', () => resolve(listeningServer));
-        listeningServer.once('error', reject);
-    });
-
-    try {
-        return await fetch(`http://127.0.0.1:${server.address().port}${requestPath}`, {
-            redirect: 'manual',
-            ...options
-        });
-    } finally {
-        await new Promise((resolve, reject) => server.close((err) => err ? reject(err) : resolve()));
-    }
-}
-
 test.afterEach(() => {
     Campground.find = originalCampgroundMethods.find;
     Campground.findById = originalCampgroundMethods.findById;
@@ -100,6 +86,27 @@ test('GET /campgrounds renders when MongoDB find returns an empty array', async 
     assert.equal(response.status, 200);
     assert.match(html, /No campgrounds have been listed yet/);
     assert.match(html, /"type":"FeatureCollection","features":\[\]/);
+});
+
+test('campground map data escapes script-breaking stored content', async () => {
+    Campground.find = async () => [{
+        _id: new mongoose.Types.ObjectId(),
+        title: '</script><script>globalThis.injected=true</script>',
+        description: 'Unsafe <markup>',
+        location: 'Test location',
+        images: [{ url: 'https://example.com/camp.jpg' }],
+        geometry: { type: 'Point', coordinates: [24, 59] },
+        toJSON() {
+            return this;
+        }
+    }];
+
+    const response = await request(createRouteApp(), '/campgrounds');
+    const html = await response.text();
+
+    assert.equal(response.status, 200);
+    assert.doesNotMatch(html, /<script>globalThis\.injected=true<\/script>/);
+    assert.match(html, /\\u003c\/script>/);
 });
 
 test('malformed campground IDs return 400 without querying MongoDB', async () => {

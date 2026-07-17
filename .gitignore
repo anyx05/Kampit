@@ -1,2 +1,56 @@
-node_modules
+# Dependencies
+node_modules/
+
+# Local environment and secrets
 .env
+.env.*
+!.env.example
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Test and generated reports
+coverage/
+.nyc_output/
+test-results/
+reports/
+
+# Local caches and temporary output
+.cache/
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Local uploads and seed preparation assets
+uploads/
+public/uploads/
+seeds/**/cache/
+seeds/**/generated/
+seeds/gsb-camps/source-images/*
+!seeds/gsb-camps/source-images/README.md
+
+# Local database dumps and archives
+dump/
+dumps/
+backups/
+*.bson
+*.archive
+*.zip
+*.tar
+*.tar.gz
+
+# Editor, agent, and operating-system files
+.agents/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db

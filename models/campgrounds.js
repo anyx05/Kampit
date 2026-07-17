@@ -18,6 +18,54 @@ const imageSchema = new Schema(
     { _id: false }
 );
 
+const seedImageSourceSchema = new Schema(
+    {
+        sourcePath: { type: String, trim: true },
+        sourceUrl: { type: String, trim: true },
+        attribution: { type: String, trim: true }
+    },
+    { _id: false }
+);
+
+const seedImageRightsDeclarationSchema = new Schema(
+    {
+        basis: {
+            type: String,
+            enum: ['documented-source', 'user-confirmed-reuse-no-attribution'],
+            required: true
+        },
+        confirmedAt: { type: Date, required: true },
+        confirmationNote: { type: String, required: true, trim: true }
+    },
+    { _id: false }
+);
+
+const seedVerificationSchema = new Schema(
+    {
+        identity: { type: Boolean, default: false },
+        location: { type: Boolean, default: false },
+        coordinates: { type: Boolean, default: false },
+        content: { type: Boolean, default: false },
+        pricing: { type: Boolean, default: false },
+        imageRights: { type: Boolean, default: false }
+    },
+    { _id: false }
+);
+
+const seedMetadataSchema = new Schema(
+    {
+        dataset: { type: String, trim: true },
+        version: { type: String, trim: true },
+        sourceUrls: [{ type: String, trim: true }],
+        imageSources: { type: [seedImageSourceSchema], default: undefined },
+        imageRightsDeclaration: { type: seedImageRightsDeclarationSchema, default: undefined },
+        verification: { type: seedVerificationSchema, default: undefined },
+        notes: { type: String, trim: true },
+        lastSeededAt: Date
+    },
+    { _id: false }
+);
+
 imageSchema.virtual('thumbnail').get(function () {
     return this.url.replace('upload', 'upload/c_thumb,w_200');
 });
@@ -87,6 +135,22 @@ const CampgroundSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "User",
         required: [true, 'Campground author is required.']
+    },
+    seedKey: {
+        type: String,
+        trim: true,
+        unique: true,
+        sparse: true,
+        immutable: true
+    },
+    seedManaged: {
+        type: Boolean,
+        default: false,
+        index: true
+    },
+    seedMetadata: {
+        type: seedMetadataSchema,
+        default: undefined
     }
 }, {
     timestamps: true,
@@ -96,13 +160,6 @@ const CampgroundSchema = new Schema({
 CampgroundSchema.pre(['updateOne', 'updateMany', 'findOneAndUpdate'], function enableUpdateValidators() {
     this.setOptions({ runValidators: true });
 });
-
-CampgroundSchema.virtual('properties.map_popUp').get(function(){
-    return `
-        <h3><strong><a href="campgrounds/${this._id}">${this.title}</a></strong></h3>
-        <p>${this.description.slice(0,30)}...</p>
-    `;
-})
 
 CampgroundSchema.post('findOneAndDelete', async (doc) => {
     if (doc) {

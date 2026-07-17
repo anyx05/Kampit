@@ -24,7 +24,7 @@ module.exports.signUp = async (req, res) => {
     try {
         authUser = await User.register(user, password);
     } catch (e) {
-        console.error(e);
+        console.warn(`User registration failed (${e.name || 'Error'}).`);
         if (e.message?.includes('username')) {
             req.flash('error', 'Username already exists.');
         } else if (e.message?.includes('email')) {

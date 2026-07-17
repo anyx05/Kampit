@@ -60,15 +60,26 @@
           alt=""
         />
       </div>
-      <% } else { %> <% for( let img of campground.images ) { %>
+      <% } else { %> <% for (let imageIndex = 0; imageIndex < campground.images.length; imageIndex++) { %>
+      <% const img = campground.images[imageIndex]; %>
+      <% const imageSource = campground.seedMetadata?.imageSources?.[imageIndex]; %>
       <div
         class="h-full absolute top-0 opacity-0 transition-opacity duration-1000 ease-in-out carousel-item"
       >
         <img
           class="h-full w-full max-md:rounded-t-lg md:rounded-l-lg"
           src="<%= img.url %>"
-          alt=""
+          alt="<%= campground.title %>"
         />
+        <% if (imageSource?.attribution) { %>
+        <p class="absolute bottom-0 left-0 right-0 bg-black/60 px-2 py-1 text-xs text-white">
+          <% if (imageSource.sourceUrl) { %>
+          <a class="underline" href="<%= imageSource.sourceUrl %>" target="_blank" rel="noopener noreferrer"><%= imageSource.attribution %></a>
+          <% } else { %>
+          <%= imageSource.attribution %>
+          <% } %>
+        </p>
+        <% } %>
       </div>
       <% } %> <% } %>
       <!-- Slider controls -->
@@ -135,11 +146,17 @@
     </h3>
     <p class="mb-6 font-normal text-gray-800"><%= campground.description %></p>
     <div class="flex items-center justify-between">
+      <% if (campground.seedManaged) { %>
+      <p class="text-primary-lt text-lg font-bold w-1/2">
+        No nightly fee<span class="block text-base font-normal">GSB application required</span>
+      </p>
+      <% } else { %>
       <p class="text-primary-lt text-lg font-bold w-1/2">
         $<%= campground.price %><span class="text-base font-normal"
           >/night</span
         >
       </p>
+      <% } %>
       <% if (sameId(campgroundAuthor, signedUser)) { %>
       <div class="flex">
         <!-- Edit Button -->
